@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>MainView.qml</file>
+        <file>FriendDelegate.qml</file>
+        <file>qmldir</file>
+        <file>Style.qml</file>
+        <file>animations/RingingAnimation.qml</file>
+        <file>FriendsView.qml</file>
+        <file>Profiles.qml</file>
+        <file>SelectProfile.qml</file>
+        <file>CreateProfile.qml</file>
+        <file>controls/FlatButton.qml</file>
+        <file>controls/Page.qml</file>
+        <file>AppActions.qml</file>
+    </qresource>
+</RCC>

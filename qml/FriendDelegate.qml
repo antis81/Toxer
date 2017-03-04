@@ -27,6 +27,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import "." // QTBUG-34418
+import "controls"
 
 Item {
     id: root
@@ -65,15 +66,8 @@ Item {
                 id: name
 
                 width: parent.width
-                maximumLineCount: 1
-                wrapMode: Text.NoWrap
-                textFormat: Text.PlainText
-                elide: Text.ElideRight
 
-                renderType: Text.NativeRendering
-                font.pointSize: Style.fontPointSize + 2
                 font.bold: true
-                color: Style.color.text
                 text: "<alias>"
             }
 
@@ -81,14 +75,7 @@ Item {
                 id: statusMessage
 
                 width: parent.width
-                maximumLineCount: 1
-                wrapMode: Text.NoWrap
-                textFormat: Text.PlainText
-                elide: Text.ElideRight
 
-                renderType: Text.NativeRendering
-                font.pointSize: Style.fontPointSize
-                color: Style.color.text
                 text: "<status_message>"
             }
         }

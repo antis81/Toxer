@@ -25,69 +25,74 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 
-import "." as Controls
-import ".."
+import ".." // QTBUG-34418
+import "../controls" as Controls
 
-Rectangle {
+Column {
     id: root
 
-    property int padding: 15
+    width: 400
+    height: 300
 
-    property alias text: contentLabel.text
-    property color hoverColor: Style.color.alternateBase
+    spacing: 10
 
-    signal clicked
+    Column {
+        width: parent.width
 
-    Accessible.role: Accessible.Button
-    Accessible.name: contentLabel.text
-    Accessible.defaultButton: false
-    Accessible.checkable: false
-    Accessible.onPressAction: {
-        clicked();
-    }
+        Controls.Text {
+            text: qsTr("Base Color");
+        }
 
-    implicitWidth: contentLabel.width + padding
-    implicitHeight: contentLabel.height + padding
+        Controls.Slider {
+            width: parent.width
 
-    color: mouseArea.containsMouse ? hoverColor : Style.color.base
-    border.color: "transparent"
-    border.width: 2
-    radius: 3
+            text: qsTr("Hue")
+            value: Style.color.base.hslHue
 
+            onValueChanged: {
+                Style.color.base.hslHue = value
+            }
+        }
 
-    Controls.Text {
-        id: contentLabel
+        Controls.Slider {
+            width: parent.width
 
-        anchors.centerIn: parent
+            text: qsTr("Saturation")
+            value: Style.color.base.hslSaturation
 
-        color: Style.color.text
-    }
+            onValueChanged: {
+                Style.color.base.hslSaturation = value
+            }
+        }
 
-    MouseArea {
-        id: mouseArea
+        Controls.Slider {
+            width: parent.width
 
-        anchors.fill: parent
-        hoverEnabled: true
+            text: qsTr("Lightness");
+            from: 0.1
+            to: 0.9
+            value: Style.color.base.hslLightness
 
-        onClicked: {
-            root.Accessible.pressAction();
+            onValueChanged: {
+                Style.color.base.hslLightness = value;
+            }
         }
     }
 
-    SequentialAnimation on border.color {
-        loops: Animation.Infinite
-        running: root.Accessible.defaultButton
-
-        ColorAnimation {
-            from: Style.color.base
-            to: Qt.lighter(root.color, 1.8)
-            duration: 800
+    CheckBox {
+        style: CheckBoxStyle {
+            label: Controls.Text {
+                text: qsTr("Light Theme")
+            }
         }
-        ColorAnimation {
-            from: Qt.lighter(root.color, 1.8)
-            to: Style.color.base
-            duration: 800
+
+        checked: Style.lightTheme
+
+        onCheckedChanged: {
+            Style.lightTheme = checked;
         }
     }
 }

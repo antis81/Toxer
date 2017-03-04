@@ -27,67 +27,65 @@
 import QtQuick 2.0
 
 import "." as Controls
-import ".."
+import ".." // QTBUG-34418
 
 Rectangle {
-    id: root
+    id: slider
 
-    property int padding: 15
+    property real from: 0.0
+    property real to: 1.0
+    property real stepSize: 0.01
+    property real value: 0.5
 
-    property alias text: contentLabel.text
-    property color hoverColor: Style.color.alternateBase
+    property alias text: text.text
 
-    signal clicked
+    width: 100
+    height: 30
 
-    Accessible.role: Accessible.Button
-    Accessible.name: contentLabel.text
-    Accessible.defaultButton: false
-    Accessible.checkable: false
-    Accessible.onPressAction: {
-        clicked();
+    Accessible.role: Accessible.Slider
+    Accessible.focusable: true
+
+    border.color: Style.color.alternateBase
+    border.width: 1
+
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: Style.color.base }
+        GradientStop { position: 0.38; color: Style.color.alternateBase }
     }
 
-    implicitWidth: contentLabel.width + padding
-    implicitHeight: contentLabel.height + padding
+    Rectangle {
+        id: indicator
 
-    color: mouseArea.containsMouse ? hoverColor : Style.color.base
-    border.color: "transparent"
-    border.width: 2
-    radius: 3
+        x: slider.border.width
+        y: slider.border.width
 
+        width: {
+            var w = slider.width - 2 * slider.border.width;
+            var range = to - from;
+            var v = (slider.value - from) / range;
+            return v * w;
+        }
+        height: slider.height - 2 * slider.border.width
+        radius: 2
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: Style.color.alternateBase }
+            GradientStop { position: 0.38; color: Style.color.base }
+        }
+    }
 
     Controls.Text {
-        id: contentLabel
+        id: text
 
         anchors.centerIn: parent
-
-        color: Style.color.text
     }
 
     MouseArea {
-        id: mouseArea
-
         anchors.fill: parent
-        hoverEnabled: true
-
-        onClicked: {
-            root.Accessible.pressAction();
-        }
-    }
-
-    SequentialAnimation on border.color {
-        loops: Animation.Infinite
-        running: root.Accessible.defaultButton
-
-        ColorAnimation {
-            from: Style.color.base
-            to: Qt.lighter(root.color, 1.8)
-            duration: 800
-        }
-        ColorAnimation {
-            from: Qt.lighter(root.color, 1.8)
-            to: Style.color.base
-            duration: 800
+        onMouseXChanged: {
+            var pos = mouseX / (slider.width - 2 * slider.border.width);
+            var range = to - from;
+            var v = (range < 1 ? pos * range : pos / range) + from;
+            slider.value = Math.max(Math.min(v, slider.to), slider.from);
         }
     }
 }

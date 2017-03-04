@@ -28,10 +28,10 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
-import "animations"
-import "controls"
+import "animations" as Animations
+import "controls" as Controls
 
-Page {
+Controls.Page {
     id: root
 
     width: Math.min(600, Screen.width)
@@ -197,7 +197,6 @@ Page {
             }
         }
 
-
         Loader {
             id: pageLoader
 
@@ -206,7 +205,7 @@ Page {
             Layout.margins: 9
         }
 
-        RingingAnimation {
+        Animations.Ringing {
             target: logo
             duration: 100
             loops: 12

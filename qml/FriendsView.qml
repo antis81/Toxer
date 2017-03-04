@@ -30,106 +30,114 @@ import com.tox.qmlcomponents 1.0
 import com.tox.qmltypes 1.0
 import "." // QTBUG-34418
 
-ListView {
-    id: friendsView
+import "controls" as Controls
 
-    property bool compactMode: false
+Controls.SubPage {
+    id : root
 
-    ToxFriendQuery {
-        id: toxFriends
+    ListView {
+        id: friendsView
 
-        function statusIcon(friendIndex) {
-            if (isOnline(friendIndex)) {
-                switch (statusInt(friendIndex)) {
-                case ToxTypes.Unknown:
-                case ToxTypes.Away: return Style.icon.away;
-                case ToxTypes.Busy: return Style.icon.busy;
-                case ToxTypes.Ready: return Style.icon.online;
-                }
+        property bool compactMode: false
 
-                return Style.icon.away;
-            } else {
-                return Style.icon.offline;
-            }
-        }
-    }
+        anchors.fill: parent
 
-    width: 200
-    height: 300
+        ToxFriendQuery {
+            id: toxFriends
 
-    // TODO: initialize model by toxFriends.friends()
-    model: toxFriends.count()
+            function statusIcon(friendIndex) {
+                if (isOnline(friendIndex)) {
+                    switch (statusInt(friendIndex)) {
+                    case ToxTypes.Unknown:
+                    case ToxTypes.Away: return Style.icon.away;
+                    case ToxTypes.Busy: return Style.icon.busy;
+                    case ToxTypes.Ready: return Style.icon.online;
+                    }
 
-    spacing: compactMode ? 2 : 8
-    delegate: FriendDelegate {
-        id: friendDelegate
-
-        height: friendsView.compactMode ? 22 : 36
-        width: friendsView.width
-
-        name.text: toxFriends.name(modelData)
-
-        statusMessage.visible: !friendsView.compactMode
-        statusMessage.text: toxFriends.statusMessage(modelData)
-
-        avatar.source: {
-            var url = Toxer.avatarsUrl() + "/" +
-                    toxFriends.publicKeyStr(modelData).toUpperCase() + ".png"
-            return Toxer.exists(url) ? url : Style.icon.noAvatar
-        }
-
-        statusLight.source: toxFriends.statusIcon(modelData);
-
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                friendsView.currentIndex = index
-            }
-        }
-
-        Connections {
-            // TODO: define the connections inside TFQ instead of delegate
-            target: toxFriends
-            onIsOnlineChanged: {
-                if (index === modelData) {
-                    // TODO: get icon by connection state
-                    statusLight.source = toxFriends.statusIcon(index);
-                }
-            }
-            onStatusChanged: {
-                if (index === modelData) {
-                    // TODO: get icon by state enum
-                    statusLight.source = toxFriends.statusIcon(index);
-                }
-            }
-            onNameChanged: {
-                if (index === modelData) {
-                    friendDelegate.name.text = name;
-                }
-            }
-            onStatusMessageChanged: {
-                if (index === modelData) {
-                    friendDelegate.statusMessage.text = statusMessage;
+                    return Style.icon.away;
+                } else {
+                    return Style.icon.offline;
                 }
             }
         }
-    }
 
-    clip: true
-    focus: true
-    highlightFollowsCurrentItem: false
-    highlight: Rectangle {
-        width: friendsView.currentItem.width
-        height: friendsView.currentItem.height
-        border.color: "#80FFFFFF";
-        color: Qt.darker("#33000000", 1.2)
-        radius: 5
-        y: friendsView.currentItem.y
-        z: friendsView.currentItem.z + 1
+        width: 200
+        height: 300
 
-        Behavior on y {
-            NumberAnimation { duration: 120 }
+        // TODO: initialize model by toxFriends.friends()
+        model: toxFriends.count()
+
+        spacing: compactMode ? 2 : 8
+        delegate: FriendDelegate {
+            id: friendDelegate
+
+            height: friendsView.compactMode ? 22 : 36
+            width: friendsView.width
+
+            name.text: toxFriends.name(modelData)
+
+            statusMessage.visible: !friendsView.compactMode
+            statusMessage.text: toxFriends.statusMessage(modelData)
+
+            avatar.source: {
+                var url = Toxer.avatarsUrl() + "/" +
+                        toxFriends.publicKeyStr(modelData).toUpperCase() + ".png"
+                return Toxer.exists(url) ? url : Style.icon.noAvatar
+            }
+
+            statusLight.source: toxFriends.statusIcon(modelData);
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    friendsView.currentIndex = index
+                }
+            }
+
+            Connections {
+                // TODO: define the connections inside TFQ instead of delegate
+                target: toxFriends
+                onIsOnlineChanged: {
+                    if (index === modelData) {
+                        // TODO: get icon by connection state
+                        statusLight.source = toxFriends.statusIcon(index);
+                    }
+                }
+                onStatusChanged: {
+                    if (index === modelData) {
+                        // TODO: get icon by state enum
+                        statusLight.source = toxFriends.statusIcon(index);
+                    }
+                }
+                onNameChanged: {
+                    if (index === modelData) {
+                        friendDelegate.name.text = name;
+                    }
+                }
+                onStatusMessageChanged: {
+                    if (index === modelData) {
+                        friendDelegate.statusMessage.text = statusMessage;
+                    }
+                }
+            }
+        }
+
+        clip: true
+        focus: true
+        highlightFollowsCurrentItem: false
+        highlight: Rectangle {
+            width: friendsView.currentItem.width
+            height: friendsView.currentItem.height
+            border.color: "#80FFFFFF";
+            color: Qt.darker("#33000000", 1.2)
+            radius: 5
+            y: friendsView.currentItem.y
+            z: friendsView.currentItem.z + 1
+
+            Behavior on y {
+                NumberAnimation { duration: 120 }
+            }
         }
     }
 }

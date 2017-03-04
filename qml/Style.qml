@@ -36,9 +36,8 @@ QtObject {
     }
 
     property QtObject color: QtObject {
-        property color base: "#1c1c1c"
-        property color alternateBase: lightTheme ? Qt.darker(base, 1.8)
-                                                 : Qt.lighter(base, 1.8)
+        property color base: Qt.hsla(0.0, 0.0, 0.1)
+        property color alternateBase: Qt.lighter(base, 1.6)
         property color text: lightTheme ? "#333333" : "#cccccc"
     }
 

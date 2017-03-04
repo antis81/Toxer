@@ -30,15 +30,18 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
 import com.tox.qmlcomponents 1.0
+import com.tox.qmltypes 1.0
 
 import "." // QTBUG-34418
-import "controls"
+import "controls" as Controls
 
-Page {
+Controls.Page {
     id: root
 
     width: Math.min(280, Screen.width)
     height: Math.min(430, Screen.height)
+
+    readonly property url defaultView: "FriendsView.qml"
 
     ToxProfileQuery {
         id: toxProfile
@@ -72,8 +75,24 @@ Page {
         }
     }
 
+    ExclusiveGroup {
+        id: mainToolButtons
+
+        onCurrentChanged: {
+            if (current === btnSettings) {
+                view.source = "settings/Overview.qml";
+            } else if (current === addIcon) {
+                view.source = "AddFriendView.qml";
+            } else {
+                view.source = root.defaultView;
+            }
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
+
+        spacing: 0
 
         Rectangle {
             id: selfView
@@ -106,11 +125,114 @@ Page {
             }
         }
 
-        FriendsView {
-            id: friendsView
+        Loader {
+            id: view
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            Component.onCompleted: {
+                view.source = root.defaultView;
+            }
+
+            Connections {
+                target: view.item
+                onClosing: {
+                    view.source = root.defaultView;
+                    mainToolButtons.current = null;
+                }
+            }
+        }
+
+        Rectangle {
+            id: quickActions
+
+            Layout.fillWidth: true
+            Layout.minimumHeight: Math.max(root.height * 0.05, 26);
+            Layout.maximumHeight: 32
+
+            color: Style.color.alternateBase
+
+            RowLayout {
+                anchors.fill: parent
+
+                spacing: 0
+
+                ToolButton {
+                    id: btnSettings
+
+                    Layout.fillHeight: true
+                    width: height
+                    Layout.margins: 2
+
+                    checkable: true
+                    exclusiveGroup: mainToolButtons
+
+                    clip: true
+                    iconSource: Style.icon.settings
+
+                    NumberAnimation {
+                        id: rotAni
+
+                        target: btnSettings
+                        property: "rotation"
+                        duration: 2000
+                        from: 0
+                        to: 360
+                        loops: Animation.Infinite
+                    }
+
+                    onHoveredChanged: {
+                        if (hovered) {
+                            if (!rotAni.running) {
+                                rotAni.start();
+                            }
+                        } else {
+                            if (rotAni.running) {
+                                rotAni.stop();
+                            }
+                        }
+                    }
+                }
+
+                TextField {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.margins: 1
+
+                    font.pointSize: Style.fontPointSize;
+                    placeholderText: qsTr("Search friend…");
+                }
+
+                ToolButton {
+                    id: addIcon
+
+                    Layout.fillHeight: true
+                    width: height
+                    Layout.margins: 2
+
+                    clip: true
+                    iconSource: Style.icon.add
+
+                    checkable: true
+                    exclusiveGroup: mainToolButtons
+
+                    NumberAnimation {
+                        id: pushAni
+
+                        target: addIcon
+                        property: "scale"
+                        duration: 200
+                        alwaysRunToEnd: true
+                    }
+
+                    onHoveredChanged: {
+                        pushAni.stop();
+                        pushAni.to = hovered ? 0.7 : 1.0;
+                        pushAni.restart();
+                    }
+                }
+            }
         }
     }
 }

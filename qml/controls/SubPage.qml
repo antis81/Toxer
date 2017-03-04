@@ -25,65 +25,9 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.1
 
-import "controls"
-
-ColumnLayout {
+Item {
     id: root
 
-    Item {
-        // spacer
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    ComboBox {
-        id: profileSelector
-
-        Layout.fillWidth: true
-        model: Toxer.availableProfiles();
-    }
-
-    TextField {
-        id: txtPassword
-
-        Layout.fillWidth: true
-        echoMode: TextInput.Password
-        placeholderText: qsTr("Enter the profile's password")
-    }
-
-    Item {
-        // spacer
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    Row {
-        Layout.alignment: Qt.AlignRight
-
-        spacing: 5
-
-        FlatButton {
-            id: btnImport
-
-            padding: 15
-            text: qsTr("Import Profile")
-        }
-
-        FlatButton {
-            id: btnStart
-
-            Accessible.defaultButton: true
-
-            padding: 15
-            text: qsTr("Load Profile")
-
-            onClicked: {
-                Toxer.activateProfile(profileSelector.currentText,
-                                      txtPassword.text);
-            }
-        }
-    }
+    signal closing
 }

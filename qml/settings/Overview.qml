@@ -25,69 +25,63 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Layouts 1.1
 
-import "." as Controls
-import ".."
+import "." // QTBUG-34418
+import "../controls" as Controls
 
-Rectangle {
+Controls.SubPage {
     id: root
 
-    property int padding: 15
+    ListModel {
+        id: menuModel
 
-    property alias text: contentLabel.text
-    property color hoverColor: Style.color.alternateBase
-
-    signal clicked
-
-    Accessible.role: Accessible.Button
-    Accessible.name: contentLabel.text
-    Accessible.defaultButton: false
-    Accessible.checkable: false
-    Accessible.onPressAction: {
-        clicked();
+        ListElement {
+            caption: qsTr("Appearance")
+            description: qsTr("Appearance settings")
+            page: "Appearance.qml"
+        }
     }
 
-    implicitWidth: contentLabel.width + padding
-    implicitHeight: contentLabel.height + padding
-
-    color: mouseArea.containsMouse ? hoverColor : Style.color.base
-    border.color: "transparent"
-    border.width: 2
-    radius: 3
-
-
-    Controls.Text {
-        id: contentLabel
-
-        anchors.centerIn: parent
-
-        color: Style.color.text
-    }
-
-    MouseArea {
-        id: mouseArea
-
+    ColumnLayout {
         anchors.fill: parent
-        hoverEnabled: true
 
-        onClicked: {
-            root.Accessible.pressAction();
+        Flow {
+            id: menu
+
+            Layout.fillWidth: true
+            Layout.minimumHeight: 24
+
+            Controls.FlatButton {
+                text: qsTr("Back")
+                onClicked: { closing(); }
+            }
+
+            Repeater {
+                id: menuCtl
+
+                model: menuModel
+
+                Controls.FlatButton {
+                    text: caption
+                    Accessible.description: description
+
+                    onClicked: {
+                        settingsPage.source = page
+                    }
+                }
+            }
         }
-    }
 
-    SequentialAnimation on border.color {
-        loops: Animation.Infinite
-        running: root.Accessible.defaultButton
+        Loader {
+            id: settingsPage
 
-        ColorAnimation {
-            from: Style.color.base
-            to: Qt.lighter(root.color, 1.8)
-            duration: 800
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
-        ColorAnimation {
-            from: Qt.lighter(root.color, 1.8)
-            to: Style.color.base
-            duration: 800
+
+        Component.onCompleted: {
+            // TODO: activate first menu entry
         }
     }
 }

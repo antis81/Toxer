@@ -31,11 +31,13 @@
 #include <QThread>
 
 #include "Private/ToxProfile.h"
+#include "Settings.h"
 #include "Toxer.h"
 #include "ToxTypes.h"
 
 inline static void registerQmlTypes() {
     ToxTypes::registerQmlTypes();
+    Settings::registerQmlTypes();
 
     constexpr const char* modComponents = { "com.tox.qmlcomponents" };
     qmlRegisterType<ToxProfileQuery>(modComponents, 1, 0, "ToxProfileQuery");

@@ -33,6 +33,9 @@
 
 class Settings : public QSettings
 {
+public:
+    static void registerQmlTypes();
+
 protected:
     Settings(Scope scope, const QString& filename = QStringLiteral("Settings"));
 
@@ -49,60 +52,26 @@ protected:
     }
 };
 
-class ToxSettings final : private Settings
+class ToxSettings : public Settings
 {
+    Q_OBJECT
 public:
     ToxSettings(Scope scope = UserScope);
 
-    inline bool ipv6_enabled() const {
-        return value(QLatin1String("tox/ipv6_enabled"), true).toBool();
-    }
-    inline void set_ipv6_enabled(bool enabled) {
-        if (set(QLatin1String("tox/ipv6_enabled"), enabled, ipv6_enabled())) {
-            emit ipv6_enabled_changed(enabled);
-        }
-    }
+    Q_INVOKABLE bool ipv6_enabled() const;
+    Q_INVOKABLE void set_ipv6_enabled(bool enabled);
 
-    inline bool udp_enabled() const {
-        return value(QLatin1String("tox/udp_enabled"), false).toBool();
-    }
-    inline void set_udp_enabled(bool enabled) {
-        if (set(QLatin1String("tox/udp_enabled"), enabled, udp_enabled())) {
-            emit udp_enabled_changed(enabled);
-        }
-    }
+    Q_INVOKABLE bool udp_enabled() const;
+    Q_INVOKABLE void set_udp_enabled(bool enabled);
 
-    inline ToxTypes::Proxy proxy_type() const {
-        return value(QLatin1String("tox/proxy_type"),
-                     ToxTypes::toQVariant(ToxTypes::Proxy::None))
-                .value<ToxTypes::Proxy>();
-    }
-    inline void set_proxy_type(ToxTypes::Proxy type) {
-        if (set(QLatin1String("tox/proxy_type"), ToxTypes::toQVariant(type),
-                ToxTypes::toQVariant(proxy_type())))
-        {
-            emit proxy_type_changed(ToxTypes::Proxy::None);
-        }
-    }
+    Q_INVOKABLE ToxTypes::Proxy proxy_type() const;
+    Q_INVOKABLE void set_proxy_type(ToxTypes::Proxy type);
 
-    inline quint16 proxy_port() const {
-        return static_cast<quint16>(
-                    value(QLatin1String("tox/proxy_port"), 0).toUInt());
-    }
-    inline void set_proxy_port(quint16 port) {
-        if (set(QLatin1String("tox/proxy_port"), port, proxy_port())) {
-            emit proxy_port_changed(port);
-        }
-    }
+    Q_INVOKABLE quint16 proxy_port() const;
+    Q_INVOKABLE void set_proxy_port(quint16 port);
 
-    inline QString proxy_addr() const {
-        return value(QLatin1String("tox/proxy_addr")).toString();
-    }
-    inline void set_proxy_addr(const QString& ip) {
-        if (set(QLatin1String("tox/proxy_addr"), ip, proxy_addr())) {
-            emit proxy_addr_changed(ip);
-        }
-    }
+    Q_INVOKABLE QString proxy_addr() const;
+    Q_INVOKABLE void set_proxy_addr(const QString& ip);
 
 signals:
     void ipv6_enabled_changed(bool);

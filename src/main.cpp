@@ -34,6 +34,14 @@
 #include "Toxer.h"
 #include "ToxTypes.h"
 
+inline static void registerQmlTypes() {
+    ToxTypes::registerQmlTypes();
+
+    constexpr const char* modComponents = { "com.tox.qmlcomponents" };
+    qmlRegisterType<ToxProfileQuery>(modComponents, 1, 0, "ToxProfileQuery");
+    qmlRegisterType<ToxFriendQuery>(modComponents, 1, 0, "ToxFriendQuery");
+}
+
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -43,11 +51,7 @@ int main(int argc, char *argv[])
     app.setApplicationName(QStringLiteral("Toxer"));
     app.setApplicationVersion(QStringLiteral(TOXER_VERSION));
 
-    qmlRegisterType<ToxProfileQuery>("com.tox.qmlcomponents", 1, 0,
-                                     "ToxProfileQuery");
-    qmlRegisterType<ToxFriendQuery>("com.tox.qmlcomponents", 1, 0,
-                                    "ToxFriendQuery");
-    ToxTypes::registerQmlTypes();
+    registerQmlTypes();
 
     Toxer toxer;
     QQuickView view;

@@ -48,10 +48,13 @@ public:
 
 public:
     inline static void registerQmlTypes() {
+        qRegisterMetaType<UserStatus>();
+        qRegisterMetaType<ConnectionType>();
+        qRegisterMetaType<Proxy>();
+
         qmlRegisterUncreatableType<ToxTypes>(
                     "com.tox.qmltypes", 1, 0, "ToxTypes",
                     QStringLiteral("enumeration types cannot be created"));
-        qRegisterMetaType<UserStatus>();
     }
 
     template<typename T>

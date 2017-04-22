@@ -32,8 +32,16 @@ SET (CMAKE_AUTOMOC ON)
 ADD_SUBDIRECTORY (lib)
 
 SET (TOX_LIBS
-    toxcore
     toxencryptsave
+    toxav
+    toxcore
+    toxgroup
+    toxmessenger
+    toxfriends
+    toxdht
+    toxnetcrypto
+    toxcrypto
+    toxnetwork
     )
 
 SET (SRC_FILES ${SRC_FILES}

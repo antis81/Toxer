@@ -29,6 +29,7 @@
 
 #include <QMetaEnum>
 #include <QQmlEngine>
+#include <QtQml>
 
 /**
 @brief Qt abstraction of Tox enumeration types.

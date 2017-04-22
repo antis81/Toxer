@@ -81,7 +81,7 @@ Controls.Page {
         onCurrentChanged: {
             if (current === btnSettings) {
                 view.source = "settings/Overview.qml";
-            } else if (current === addIcon) {
+            } else if (current === btnAddFriend) {
                 view.source = "AddFriendView.qml";
             } else {
                 view.source = root.defaultView;
@@ -158,14 +158,14 @@ Controls.Page {
 
                 spacing: 0
 
-                ToolButton {
+                Controls.FlatButton {
                     id: btnSettings
 
                     Layout.fillHeight: true
                     width: height
                     Layout.margins: 2
 
-                    checkable: true
+                    Accessible.checkable: true
                     exclusiveGroup: mainToolButtons
 
                     clip: true
@@ -174,7 +174,7 @@ Controls.Page {
                     NumberAnimation {
                         id: rotAni
 
-                        target: btnSettings
+                        target: btnSettings.contentIcon
                         property: "rotation"
                         duration: 2000
                         from: 0
@@ -182,8 +182,8 @@ Controls.Page {
                         loops: Animation.Infinite
                     }
 
-                    onHoveredChanged: {
-                        if (hovered) {
+                    onCheckedChanged: {
+                        if (checked) {
                             if (!rotAni.running) {
                                 rotAni.start();
                             }
@@ -204,8 +204,8 @@ Controls.Page {
                     placeholderText: qsTr("Search friend…");
                 }
 
-                ToolButton {
-                    id: addIcon
+                Controls.FlatButton {
+                    id: btnAddFriend
 
                     Layout.fillHeight: true
                     width: height
@@ -214,21 +214,21 @@ Controls.Page {
                     clip: true
                     iconSource: Style.icon.add
 
-                    checkable: true
+                    Accessible.checkable: true
                     exclusiveGroup: mainToolButtons
 
                     NumberAnimation {
                         id: pushAni
 
-                        target: addIcon
+                        target: btnAddFriend.contentIcon
                         property: "scale"
                         duration: 200
                         alwaysRunToEnd: true
                     }
 
-                    onHoveredChanged: {
+                    onCheckedChanged: {
                         pushAni.stop();
-                        pushAni.to = hovered ? 0.7 : 1.0;
+                        pushAni.to = checked ? 0.7 : 1.0;
                         pushAni.restart();
                     }
                 }

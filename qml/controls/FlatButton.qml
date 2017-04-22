@@ -25,6 +25,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.4
 
 import "." as Controls
 import ".."
@@ -34,27 +35,56 @@ Rectangle {
 
     property int padding: 15
 
+    property alias contentIcon: icon
+    property alias contentLabel: contentLabel
+
     property alias text: contentLabel.text
-    property color hoverColor: Style.color.alternateBase
+    property alias iconSource: icon.source
+    property ExclusiveGroup exclusiveGroup: null
+    property color hoverColor: {
+        var c = Style.color.base;
+        return Qt.hsla(c.hslHue + 0.2, c.hslSaturation,
+                       c.hslLightness + (c.hslLightness <= 0.5 ? 0.1 : -0.1));
+    }
+    readonly property bool hovered: mouseArea.hoverEnabled &&
+                                    mouseArea.containsMouse
+    property bool checked: Accessible.checkable && Accessible.checked;
 
     signal clicked
 
     Accessible.role: Accessible.Button
     Accessible.name: contentLabel.text
-    Accessible.defaultButton: false
-    Accessible.checkable: false
+    onCheckedChanged: {
+        if (exclusiveGroup) {
+            exclusiveGroup.current = checked ? this : null;
+        }
+    }
     Accessible.onPressAction: {
-        clicked();
+        if (Accessible.checkable) {
+            Accessible.checked = !Accessible.checked;
+        } else {
+            clicked();
+        }
     }
 
     implicitWidth: contentLabel.width + padding
     implicitHeight: contentLabel.height + padding
 
-    color: mouseArea.containsMouse ? hoverColor : Style.color.base
+    color: hovered ? hoverColor : "transparent"
     border.color: "transparent"
-    border.width: 2
+    border.width: 3
     radius: 3
 
+    Image {
+        id: icon
+
+        anchors.centerIn: parent
+        sourceSize: Qt.size(width, height)
+        Component.onCompleted: {
+            height = Math.min(width, height);
+            width = height;
+        }
+    }
 
     Controls.Text {
         id: contentLabel
@@ -80,13 +110,13 @@ Rectangle {
         running: root.Accessible.defaultButton
 
         ColorAnimation {
-            from: Style.color.base
-            to: Qt.lighter(root.color, 1.8)
+            from: border.color
+            to: hoverColor
             duration: 800
         }
         ColorAnimation {
-            from: Qt.lighter(root.color, 1.8)
-            to: Style.color.base
+            from: hoverColor
+            to: border.color
             duration: 800
         }
     }

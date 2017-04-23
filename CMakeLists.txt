@@ -17,6 +17,8 @@ SET(PROJECT_VERSION "${PROJECT_VERSION}-${PROJECT_VERSION_TWEAK}")
 ENDIF()
 ADD_DEFINITIONS (-DTOXER_VERSION="${PROJECT_VERSION}")
 
+OPTION (STATIC "Compile Toxer statically." OFF)
+
 SET (CMAKE_MODULE_PATH ${toxer_SOURCE_DIR}/cmake)
 SET (CMAKE_CXX_STANDARD 11)
 SET (CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -31,18 +33,25 @@ SET (CMAKE_AUTOMOC ON)
 
 ADD_SUBDIRECTORY (lib)
 
-SET (TOX_LIBS
-    toxencryptsave
-    toxav
-    toxcore
-    toxgroup
-    toxmessenger
-    toxfriends
-    toxdht
-    toxnetcrypto
-    toxcrypto
-    toxnetwork
-    )
+IF (STATIC)
+    SET (TOX_LIBS
+        toxencryptsave
+        toxcore
+        toxav
+        toxgroup
+        toxmessenger
+        toxfriends
+        toxdht
+        toxnetcrypto
+        toxcrypto
+        toxnetwork
+        )
+ELSE ()
+    SET (TOX_LIBS
+        toxencryptsave
+        toxcore
+        )
+ENDIF ()
 
 SET (SRC_FILES ${SRC_FILES}
     src/IToxNotify.cpp

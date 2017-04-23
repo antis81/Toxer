@@ -16,11 +16,15 @@
         <file>controls/Slider.qml</file>
         <file>settings/Overview.qml</file>
         <file>controls/TextInput.qml</file>
+        <file>MessengerView.qml</file>
+        <file>MessengerDelegate.qml</file>
+        <file>MessageModel.qml</file>
         <file>MainViewSplit.qml</file>
         <file>base/MainViewBase.qml</file>
         <file>base/Page.qml</file>
         <file>base/View.qml</file>
         <file>CurrentProfile.qml</file>
         <file>ViewLoader.qml</file>
+        <file>controls/TextEdit.qml</file>
     </qresource>
 </RCC>

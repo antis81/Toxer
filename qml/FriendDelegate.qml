@@ -27,6 +27,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
+import "." // QTBUG-34418
 import "controls" as Controls
 
 Item {

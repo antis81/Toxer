@@ -90,6 +90,17 @@ Base.View {
                 onClicked: {
                     friendsView.currentIndex = index;
                 }
+
+                onDoubleClicked: {
+                    if (viewLoader) {
+                        viewLoader.setSource("MessengerView.qml", {
+                                                 friendIndex: index
+                                             });
+                    } else {
+                        console.warn("No ViewLoader assigned to View item " +
+                                     root)
+                    }
+                }
             }
 
             Connections {

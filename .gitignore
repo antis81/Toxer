@@ -1,3 +1,6 @@
 [Bb]uild/*
 *.user
 *.backup
+
+# outsource core components
+src/

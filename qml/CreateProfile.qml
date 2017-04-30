@@ -28,7 +28,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
-import "controls"
+import "controls" as Controls
 
 ColumnLayout {
     id: root
@@ -40,7 +40,7 @@ ColumnLayout {
     }
 
     TextField {
-        id: profileSelector
+        id: txtProfileName
 
         Layout.fillWidth: true
         Layout.minimumHeight: 24
@@ -79,11 +79,18 @@ ColumnLayout {
 
         spacing: 5
 
-        FlatButton {
+        Controls.FlatButton {
             id: btnCreate
+
+            enabled: txtProfileName.length > 0 && txtPassword.length > 0 &&
+                     txtRepeatPassword.text == txtPassword.text
 
             padding: 15
             text: qsTr("Create Profile")
+
+            onClicked: {
+                Toxer.createProfile(txtProfileName.text, txtPassword.text);
+            }
         }
     }
 }

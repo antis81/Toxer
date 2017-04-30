@@ -74,6 +74,11 @@ Rectangle {
     border.color: "transparent"
     border.width: 3
     radius: 3
+    opacity: enabled ? 1 : 0.2
+
+    Behavior on opacity {
+        NumberAnimation { duration: 300 }
+    }
 
     Image {
         id: icon

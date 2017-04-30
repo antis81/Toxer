@@ -19,15 +19,14 @@ The following table provides a good overview of what is there and what is missin
 Feature | Core-Functionality | UI | TODO / Note
 ---- | ---- | ---- | ----
 Encryption | 100% | nothing to see | nothing to add
-Profile-Management | 95% | 50% | missing: save/create missing; ui is not scaling well yet -> change layout!
+Profile-Management | 100% | 95% | ui is not scaling well yet -> change layout!
 Tox-Bootstrap | 100% | 0% | visualize the DHT nodes (list/graph view - 3d?)
-Friends | 90% | 50% | status reflection in the UI
-Groups | 0% | 0% | second view (tab?)
-Chat | 0% | 0% | separate window on desktop; page on mobile
+Friends | 100% | 100% | 
+Chat | 0% | 20% | separate window on desktop; page on mobile
 Group-Chat | 0% | 0% | separate window on desktop; page on mobile
-History | 0% | 0% | no toxcore support yet
-User-Settings | 100% | 0% | create a nice UI
-Styles/Themes | 100% | 0% | base color and light/dark icon theme; no custom themes yet -> easy to implement!
+History | 0% | 0% | required for messenger to work
+User-Settings | 100% | 30% | create a nice UI
+Styles/Themes | 100% | 100% | base color and light/dark icon theme; no custom themes yet -> easy to implement!
 
 ## Downloads (binary releases)
 

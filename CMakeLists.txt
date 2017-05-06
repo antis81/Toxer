@@ -17,39 +17,51 @@ SET(PROJECT_VERSION "${PROJECT_VERSION}-${PROJECT_VERSION_TWEAK}")
 ENDIF()
 ADD_DEFINITIONS (-DTOXER_VERSION="${PROJECT_VERSION}")
 
-OPTION (STATIC "Compile Toxer statically." OFF)
+OPTION (TOXER_STATIC "Link Toxer to static libraries." OFF)
 
-SET (CMAKE_MODULE_PATH ${toxer_SOURCE_DIR}/cmake)
+SET (CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH})
 SET (CMAKE_CXX_STANDARD 11)
 SET (CMAKE_CXX_STANDARD_REQUIRED ON)
+
+FIND_PACKAGE (Qt5 COMPONENTS Core Network Qml Gui Quick REQUIRED)
+FIND_PACKAGE (sodium REQUIRED)
 
 FILE (GLOB_RECURSE SCRIPTS "scripts/*.*")
 ADD_CUSTOM_TARGET(scripts SOURCES ${SCRIPTS})
 
-FIND_PACKAGE (Qt5 COMPONENTS Core Quick)
 QT5_ADD_RESOURCES (RESOURCES res/res.qrc qml/qml.qrc)
 
+SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti")
 SET (CMAKE_AUTOMOC ON)
 
 ADD_SUBDIRECTORY (lib)
 
-IF (STATIC)
+SET (TOX_LIBS
+    toxencryptsave
+    toxcore
+    toxgroup
+    toxmessenger
+    toxfriends
+    toxnetcrypto
+    toxdht
+    toxnetwork
+    toxcrypto
+    )
+
+IF (TOXER_STATIC)
+    FIND_PACKAGE (Threads REQUIRED)
+
+    SET (CMAKE_CXX_FLAGS "-pthread ${CMAKE_CXX_FLAGS}")
+    SET (CMAKE_EXE_LINKER_FLAGS "-static ${CMAKE_EXE_LINKER_FLAGS}")
+
+    SET (sodium_USE_STATIC_LIBS ON)
+
+    INCLUDE (Qt5Static)
+
     SET (TOX_LIBS
-        toxencryptsave
-        toxcore
+        "${TOX_LIBS}"
+        toxdns
         toxav
-        toxgroup
-        toxmessenger
-        toxfriends
-        toxdht
-        toxnetcrypto
-        toxcrypto
-        toxnetwork
-        )
-ELSE ()
-    SET (TOX_LIBS
-        toxencryptsave
-        toxcore
         )
 ENDIF ()
 
@@ -75,12 +87,6 @@ ADD_EXECUTABLE (toxer
     ${RESOURCES}
     )
 
-TARGET_LINK_LIBRARIES (toxer
-    ${TOX_LIBS}
-    )
-
-QT5_USE_MODULES (toxer Core Quick)
-
 SET_PROPERTY (TARGET toxer APPEND PROPERTY COMPILE_DEFINITIONS
     QT_NO_CAST_FROM_ASCII
     QT_NO_CAST_TO_ASCII
@@ -91,3 +97,12 @@ TARGET_INCLUDE_DIRECTORIES (toxer PRIVATE
     $<BUILD_INTERFACE:
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     >)
+
+TARGET_LINK_LIBRARIES (toxer
+    Qt5::Quick
+
+    ${TOX_LIBS}
+    sodium
+
+    ${CMAKE_THREAD_LIBS_INIT}
+    )

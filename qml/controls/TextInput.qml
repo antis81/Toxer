@@ -25,67 +25,43 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.1
 
-import "controls" as Controls
+import "." as Controls
+import ".."
 
-ColumnLayout {
-    id: root
 
-    Item {
-        // spacer
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+TextInput {
+    id: input
+
+    property string placeholderText: ""
+    property alias background: background.color
+
+    horizontalAlignment: TextInput.AlignLeft
+    verticalAlignment: TextInput.AlignVCenter
+
+    color: Style.color.text
+
+    Rectangle {
+        id: background
+
+        anchors.fill: parent
+
+        color: "transparent"
+        border.color: Style.color.alternateBase
+        border.width: input.activeFocus ? 3 : 1
+
+        z: -1
     }
 
-    ComboBox {
-        id: profileSelector
+    Controls.Text {
+        anchors.fill: input
+        anchors.margins: 5
 
-        Layout.fillWidth: true
-        model: Toxer.availableProfiles();
-    }
-
-    Controls.TextInput {
-        id: txtPassword
-
-        Layout.minimumHeight: 34
-
-        Layout.fillWidth: true
-        echoMode: TextInput.Password
-        placeholderText: qsTr("Enter the profile's password")
-    }
-
-    Item {
-        // spacer
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-    }
-
-    Row {
-        Layout.alignment: Qt.AlignRight
-
-        spacing: 5
-
-        Controls.FlatButton {
-            id: btnImport
-
-            padding: 15
-            text: qsTr("Import Profile")
-        }
-
-        Controls.FlatButton {
-            id: btnStart
-
-            Accessible.defaultButton: true
-
-            padding: 15
-            text: qsTr("Load Profile")
-
-            onClicked: {
-                Toxer.activateProfile(profileSelector.currentText,
-                                      txtPassword.text);
-            }
-        }
+        horizontalAlignment: input.horizontalAlignment
+        verticalAlignment: input.verticalAlignment
+        text: input.placeholderText
+        color: input.color
+        opacity: 0.3
+        visible: !input.text
     }
 }

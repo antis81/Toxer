@@ -18,5 +18,6 @@
         <file>controls/Slider.qml</file>
         <file>settings/Overview.qml</file>
         <file>controls/SubPage.qml</file>
+        <file>controls/TextInput.qml</file>
     </qresource>
 </RCC>

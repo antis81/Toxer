@@ -25,7 +25,6 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
 import "controls" as Controls
@@ -39,30 +38,33 @@ ColumnLayout {
         Layout.fillHeight: true
     }
 
-    TextField {
+    Controls.TextInput {
         id: txtProfileName
 
         Layout.fillWidth: true
-        Layout.minimumHeight: 24
+        Layout.minimumHeight: 34
 
         placeholderText: qsTr("Enter a profile name.")
     }
 
-    TextField {
+    Controls.TextInput {
         id: txtPassword
 
         Layout.fillWidth: true
-        Layout.minimumHeight: 24
+        Layout.minimumHeight: 34
 
         echoMode: TextInput.Password
         placeholderText: qsTr("Enter the profile's password.")
     }
 
-    TextField {
+    Controls.TextInput {
         id: txtRepeatPassword
 
         Layout.fillWidth: true
-        Layout.minimumHeight: 24
+        Layout.minimumHeight: 34
+
+        background: txtRepeatPassword.text === txtPassword.text ? "transparent"
+                                                                : "#803030"
 
         echoMode: TextInput.Password
         placeholderText: qsTr("Retype the profile's password.")
@@ -83,7 +85,7 @@ ColumnLayout {
             id: btnCreate
 
             enabled: txtProfileName.length > 0 && txtPassword.length > 0 &&
-                     txtRepeatPassword.text == txtPassword.text
+                     txtRepeatPassword.text === txtPassword.text
 
             padding: 15
             text: qsTr("Create Profile")

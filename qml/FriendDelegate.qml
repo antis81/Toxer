@@ -49,12 +49,13 @@ Item {
         Image {
             id: avatar
 
-            Layout.fillHeight: true
-            Layout.minimumWidth: height
             Layout.alignment: Qt.AlignLeading
+            Layout.fillHeight: true
+            Layout.margins: 2
+            width: height
+
             fillMode: Image.PreserveAspectFit
             sourceSize: Qt.size(width, height)
-            smooth: false
         }
 
         Column {

@@ -1,10 +1,51 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
-<g>
-	<path fill="#414141" d="M25.8,24.5C42,30.3,36.8,40,36.8,40H2.6c0,0-2.7-10.9,11.9-15.5C14.5,24.5,20.3,29.4,25.8,24.5z"/>
-	<path fill="#414141" d="M10.3,10.1c0,0,0.9,13.5,9.6,13.5c8.7,0,9.7-12.6,9.7-12.6S30,0,19.9,0C9.9,0,10.3,10.1,10.3,10.1z"/>
-</g>
-</svg>
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 40 40"
+   enable-background="new 0 0 40 40"
+   xml:space="preserve"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="contact.svg"><metadata
+     id="metadata13"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+     id="defs11" /><sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview9"
+     showgrid="false"
+     inkscape:zoom="10.359114"
+     inkscape:cx="17.730836"
+     inkscape:cy="15.57919"
+     inkscape:current-layer="g3" /><g
+     id="g3"
+     transform="matrix(1.136631,0,0,1,-2.7315176,0)"><path
+       d="M 26.157581,24.5 C 37.54183,24.5 37.59489,40 37.59489,40 L 2.4031701,40 c 0,0 0.00415,-15.5 12.0968299,-15.5 0,0 6.157581,4.9 11.657581,0 z"
+       id="path5"
+       inkscape:connector-curvature="0"
+       style="fill:#414141"
+       sodipodi:nodetypes="ccccc" /><path
+       d="m 10.3,10.1 c 0,0 0.9,13.5 9.6,13.5 8.7,0 9.7,-12.6 9.7,-12.6 0,0 0.4,-11 -9.7,-11 -10,0 -9.6,10.1 -9.6,10.1 z"
+       id="path7"
+       inkscape:connector-curvature="0"
+       style="fill:#414141" /></g></svg>

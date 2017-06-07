@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/qml">
-        <file>MainView.qml</file>
+        <file>MainViewSlim.qml</file>
         <file>FriendDelegate.qml</file>
         <file>qmldir</file>
         <file>Style.qml</file>
@@ -10,14 +10,16 @@
         <file>SelectProfile.qml</file>
         <file>CreateProfile.qml</file>
         <file>controls/FlatButton.qml</file>
-        <file>controls/Page.qml</file>
         <file>AppActions.qml</file>
         <file>settings/Appearance.qml</file>
         <file>controls/Text.qml</file>
         <file>AddFriendView.qml</file>
         <file>controls/Slider.qml</file>
         <file>settings/Overview.qml</file>
-        <file>controls/SubPage.qml</file>
         <file>controls/TextInput.qml</file>
+        <file>MainViewSplit.qml</file>
+        <file>base/MainViewBase.qml</file>
+        <file>base/Page.qml</file>
+        <file>base/SubPage.qml</file>
     </qresource>
 </RCC>

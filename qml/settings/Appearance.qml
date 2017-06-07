@@ -28,6 +28,8 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 
+import com.toxer.settings 1.0
+
 import ".." // QTBUG-34418
 import "../controls" as Controls
 
@@ -39,8 +41,44 @@ Column {
 
     spacing: 10
 
+    UiSettings { id: uiSettings }
+
     Column {
         width: parent.width
+
+        ComboBox {
+            width: parent.width
+
+            model: ListModel {
+                ListElement {
+                    text: qsTr("Single-Window layout")
+                    description: qsTr("Views are shown in a single window \
+                                       side by side")
+                    value: UiSettings.Split
+                }
+                ListElement {
+                    text: qsTr("Slim Layout")
+                    description: qsTr("Slim layout meant for small screens \
+                                       like in pocket-sized devices.")
+                    value: UiSettings.Slim
+                }
+            }
+
+            onActivated: {
+                var item = model.get(index);
+                uiSettings.set_app_layout(item.value);
+            }
+
+            Component.onCompleted: {
+                var v = uiSettings.app_layout_int();
+                for(var i = 0; i < count; i++) {
+                    if (parseInt(model.get(i).value) === v) {
+                        currentIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
 
         Controls.Text {
             text: qsTr("Base Color");

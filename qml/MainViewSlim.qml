@@ -32,10 +32,10 @@ import QtQuick.Window 2.2
 import com.tox.qmlcomponents 1.0
 import com.tox.qmltypes 1.0
 
-import "." // QTBUG-34418
+import "base" as Base
 import "controls" as Controls
 
-Controls.Page {
+Base.MainViewBase {
     id: root
 
     width: Math.min(280, Screen.width)
@@ -43,36 +43,17 @@ Controls.Page {
 
     readonly property url defaultView: "FriendsView.qml"
 
-    ToxProfileQuery {
-        id: toxProfile
-
-        function statusIcon() {
-            if (isOnline()) {
-                switch (statusInt()) {
-                case ToxTypes.Unknown:
-                case ToxTypes.Away: return Style.icon.away;
-                case ToxTypes.Busy: return Style.icon.busy;
-                case ToxTypes.Ready: return Style.icon.online;
-                }
-
-                return Style.icon.away;
-            } else {
-                return Style.icon.offline;
-            }
-        }
-
-        onIsOnlineChanged: {
-            selfInfo.statusLight.source = statusIcon();
-        }
-        onStatusChanged: {
-            selfInfo.statusLight = statusIcon();
-        }
-        onUserNameChanged: {
-            selfInfo.name.text = userName;
-        }
-        onStatusMessageChanged: {
-            selfInfo.statusMessage = statusMessage;
-        }
+    toxProfile.onIsOnlineChanged: {
+        selfInfo.statusLight.source = toxProfile.statusIcon();
+    }
+    toxProfile.onStatusChanged: {
+        selfInfo.statusLight = toxProfile.statusIcon();
+    }
+    toxProfile.onUserNameChanged: {
+        selfInfo.name.text = toxProfile.userName;
+    }
+    toxProfile.onStatusMessageChanged: {
+        selfInfo.statusMessage = toxProfile.statusMessage;
     }
 
     ExclusiveGroup {

@@ -30,9 +30,10 @@ import com.tox.qmlcomponents 1.0
 import com.tox.qmltypes 1.0
 import "." // QTBUG-34418
 
+import "base" as Base
 import "controls" as Controls
 
-Controls.SubPage {
+Base.SubPage {
     id : root
 
     ListView {

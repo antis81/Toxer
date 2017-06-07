@@ -29,9 +29,10 @@ import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
 import "animations" as Animations
+import "base" as Base
 import "controls" as Controls
 
-Controls.Page {
+Base.Page {
     id: root
 
     width: Math.min(600, Screen.width)

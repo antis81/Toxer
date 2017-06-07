@@ -28,9 +28,10 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 
+import "base" as Base
 import "controls" as Controls
 
-Controls.SubPage {
+Base.SubPage {
     id: root
 
     ColumnLayout {

@@ -24,65 +24,49 @@
  * IN THE SOFTWARE.
  */
 
-import QtQuick 2.0
+import QtQuick 2.6
+import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
+import QtQuick.Window 2.2
 
-import "." // QTBUG-34418
-import "../base" as Base
+import com.tox.qmlcomponents 1.0
+import com.tox.qmltypes 1.0
+import com.toxer.settings 1.0
+
+import ".." // QTBUG-34418
 import "../controls" as Controls
 
-Base.SubPage {
+Page {
     id: root
 
-    ListModel {
-        id: menuModel
+    readonly property url defaultView: "FriendsView.qml"
+    property alias toxProfile: toxProfile
+    property alias uiSettings: uiSettings
 
-        ListElement {
-            caption: qsTr("Appearance")
-            description: qsTr("Appearance settings")
-            page: "Appearance.qml"
+    ToxProfileQuery {
+        id: toxProfile
+
+        function statusIcon() {
+            if (isOnline()) {
+                switch (statusInt()) {
+                case ToxTypes.Unknown:
+                case ToxTypes.Away: return Style.icon.away;
+                case ToxTypes.Busy: return Style.icon.busy;
+                case ToxTypes.Ready: return Style.icon.online;
+                }
+
+                return Style.icon.away;
+            } else {
+                return Style.icon.offline;
+            }
         }
     }
 
-    ColumnLayout {
-        anchors.fill: parent
+    UiSettings {
+        id: uiSettings
 
-        Flow {
-            id: menu
-
-            Layout.fillWidth: true
-            Layout.minimumHeight: 24
-
-            Controls.FlatButton {
-                text: qsTr("Back")
-                onClicked: { closing(); }
-            }
-
-            Repeater {
-                id: menuCtl
-
-                model: menuModel
-
-                Controls.FlatButton {
-                    text: caption
-                    Accessible.description: description
-
-                    onClicked: {
-                        settingsPage.source = page
-                    }
-                }
-            }
-        }
-
-        Loader {
-            id: settingsPage
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-        }
-
-        Component.onCompleted: {
-            // TODO: activate first menu entry
+        onAppLayoutChanged: {
+            Toxer.reloadUi();
         }
     }
 }

@@ -1,6 +1,8 @@
 # Toxer: The Tox-messenger that simply fits.
 Have you always been waiting for a Tox client, that simply works on your device(s), while at the same time looks beautiful and smooth without compromising security? This is what Toxer aims to become.
 
+![Toxer on LXQt](res/images/screenshots/toxer_lxqt.png)
+
 ## Resources:
 
 * Contact:
@@ -11,6 +13,14 @@ Have you always been waiting for a Tox client, that simply works on your device(
 **Please note our baby is just born and learning to walk!**
 
 In this status we focus on setteling the code basis and the release-chain. Not everything might work for you right from start… please be patient. If you have an idea where you can help out, you are welcome!
+
+## Downloads (binary releases)
+
+* [Linux/X11 (Desktop, 64-bit) nightly archive](https://build.tox.chat/view/toxer/job/toxer_build_linux_x86-64_release/lastSuccessfulBuild/artifact/toxer_build_linux_x86-64_release.tar.xz)
+    * requires some Debian 8 compatible system libraries.
+    * known to work on any "Ubuntu 16.04 (Xenial)" compatible distro
+
+If it does not work or you want to check out Toxer on other platforms, you need to compile from source. If you want to help on this side, please contact the community as written in the [Resources](#resources) section.
 
 ### Progress
 
@@ -26,11 +36,7 @@ Chat | 0% | 20% | separate window on desktop; page on mobile
 Group-Chat | 0% | 0% | separate window on desktop; page on mobile
 History | 0% | 0% | required for messenger to work
 User-Settings | 100% | 30% | create a nice UI
-Styles/Themes | 100% | 100% | base color and light/dark icon theme; no custom themes yet -> easy to implement!
-
-## Downloads (binary releases)
-
-Sorry, no pre-build binaries yet. If you want to check out Toxer, please compile from source. If you want to help on this side, please contact the community as written in the [Resources](#resources) section.
+Styles/Themes | 100% | 100% | base color and light/dark icon & text theme
 
 # Vision
 The Toxer project has a strong focus on providing a quality messenger for Tox that scales well on any platform and does not provide any artificial features not provided by the Tox-API (a.k.a toxcore).
@@ -49,5 +55,3 @@ Simplicity overlaps with stability. When the code is easy to understand, even fo
 
 # License
 The Toxer application is freely usable under the terms of the MIT license. The licenses of the underlying libraries (e.g. Qt and toxcore) also apply to these components. If you plan to re-use the code, please contact the Tox community.
-
-

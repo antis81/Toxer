@@ -28,20 +28,17 @@ import QtQuick 2.0
 
 import com.tox.qmlcomponents 1.0
 import com.tox.qmltypes 1.0
-import "." // QTBUG-34418
 
 import "base" as Base
 import "controls" as Controls
 
-Base.SubPage {
+Base.View {
     id : root
 
     ListView {
         id: friendsView
 
         property bool compactMode: false
-
-        anchors.fill: parent
 
         ToxFriendQuery {
             id: toxFriends
@@ -62,8 +59,7 @@ Base.SubPage {
             }
         }
 
-        width: 200
-        height: 300
+        anchors.fill: parent
 
         // TODO: initialize model by toxFriends.friends()
         model: toxFriends.count()
@@ -92,7 +88,7 @@ Base.SubPage {
                 anchors.fill: parent
 
                 onClicked: {
-                    friendsView.currentIndex = index
+                    friendsView.currentIndex = index;
                 }
             }
 

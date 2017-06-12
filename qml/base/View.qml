@@ -24,16 +24,14 @@
  * IN THE SOFTWARE.
  */
 
-import QtQuick 2.6
-import QtQuick.Controls 1.4
+import QtQuick 2.0
+
+import ".."
 
 Item {
     id: root
 
-    Action {
-        id: quitAction
-        text: qsTr("&Quit")
-        shortcut: StandardKey.Quit
-        onTriggered: Qt.quit()
-    }
+    property ViewLoader viewLoader: null
+
+    signal closing
 }

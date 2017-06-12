@@ -27,11 +27,10 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
-import "." // QTBUG-34418
 import "../base" as Base
 import "../controls" as Controls
 
-Base.SubPage {
+Base.View {
     id: root
 
     ListModel {

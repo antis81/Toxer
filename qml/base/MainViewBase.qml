@@ -24,43 +24,14 @@
  * IN THE SOFTWARE.
  */
 
-import QtQuick 2.6
-import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.1
-import QtQuick.Window 2.2
+import QtQuick 2.0
 
-import com.tox.qmlcomponents 1.0
-import com.tox.qmltypes 1.0
 import com.toxer.settings 1.0
-
-import ".." // QTBUG-34418
-import "../controls" as Controls
 
 Page {
     id: root
 
-    readonly property url defaultView: "FriendsView.qml"
-    property alias toxProfile: toxProfile
     property alias uiSettings: uiSettings
-
-    ToxProfileQuery {
-        id: toxProfile
-
-        function statusIcon() {
-            if (isOnline()) {
-                switch (statusInt()) {
-                case ToxTypes.Unknown:
-                case ToxTypes.Away: return Style.icon.away;
-                case ToxTypes.Busy: return Style.icon.busy;
-                case ToxTypes.Ready: return Style.icon.online;
-                }
-
-                return Style.icon.away;
-            } else {
-                return Style.icon.offline;
-            }
-        }
-    }
 
     UiSettings {
         id: uiSettings

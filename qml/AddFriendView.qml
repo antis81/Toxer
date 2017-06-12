@@ -31,7 +31,7 @@ import QtQuick.Controls 1.4
 import "base" as Base
 import "controls" as Controls
 
-Base.SubPage {
+Base.View {
     id: root
 
     ColumnLayout {

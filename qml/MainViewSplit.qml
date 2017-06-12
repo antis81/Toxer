@@ -29,10 +29,6 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
-import com.tox.qmltypes 1.0
-import com.tox.qmlcomponents 1.0
-import com.toxer.settings 1.0
-
 import "base" as Base
 import "controls" as Controls
 
@@ -42,31 +38,16 @@ Base.MainViewBase {
     width: Math.min(600, Screen.width)
     height: Math.min(480, Screen.height)
 
-    readonly property url defaultView: "AddFriendView.qml"
-
-    toxProfile.onIsOnlineChanged: {
-        selfInfo.statusLight.source = toxProfile.statusIcon();
-    }
-    toxProfile.onStatusChanged: {
-        selfInfo.statusLight = toxProfile.statusIcon();
-    }
-    toxProfile.onUserNameChanged: {
-        selfInfo.name.text = toxProfile.userName;
-    }
-    toxProfile.onStatusMessageChanged: {
-        selfInfo.statusMessage = toxProfile.statusMessage;
-    }
-
     ExclusiveGroup {
         id: mainToolButtons
 
         onCurrentChanged: {
             if (current === btnSettings) {
-                view.source = "settings/Overview.qml";
+                viewLoader.source = "settings/Overview.qml";
             } else if (current === btnAddFriend) {
-                view.source = "AddFriendView.qml";
+                viewLoader.source = "AddFriendView.qml";
             } else {
-                view.source = root.defaultView;
+                viewLoader.source = "";
             }
         }
     }
@@ -77,6 +58,7 @@ Base.MainViewBase {
         Item {
             id: layoutWrapper
 
+            implicitWidth: parent.width * 0.3
             Layout.minimumWidth: parent.width * 0.1
             Layout.maximumWidth: parent.width * 0.8
             Layout.fillHeight: true
@@ -86,40 +68,19 @@ Base.MainViewBase {
 
                 spacing: 0
 
-                Rectangle {
+                CurrentProfile {
                     id: selfView
 
                     Layout.fillWidth: true
-                    Layout.minimumHeight: Math.max(root.height * 0.1, 40)
-                    Layout.maximumHeight: 55
-
-                    color: Style.color.alternateBase
-
-                    FriendDelegate {
-                        id: selfInfo
-
-                        anchors.fill: parent
-                        anchors.margins: parent.height * 0.1
-
-                        // TODO: avatar, name and message should be editable.
-                        //       a separate flyout dialog makes sense to retain the
-                        //       ui scalable to any screen format
-
-                        avatar.source: {
-                            var url = Toxer.avatarsUrl() + "/" +
-                                    toxProfile.publicKeyStr().toUpperCase() + ".png"
-                            return Toxer.exists(url) ? url : Style.icon.noAvatar;
-                        }
-
-                        name.text: toxProfile.userName();
-                        statusMessage.text: toxProfile.statusMessage()
-                        statusLight.source: toxProfile.statusIcon()
-                    }
+                    Layout.minimumHeight: Math.max(root.height * 0.1)
+                    Layout.maximumHeight: 30
                 }
 
                 FriendsView {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
+
+                    viewLoader: viewLoader
                 }
 
                 Rectangle {
@@ -215,20 +176,17 @@ Base.MainViewBase {
             }
         }
 
-        Loader {
-            id: view
+        ViewLoader {
+            id: viewLoader
 
-            Layout.fillWidth: false
+            Layout.fillWidth: true
             Layout.fillHeight: true
 
-            Component.onCompleted: {
-                view.source = root.defaultView;
-            }
+            defaultView: "AddFriendView.qml"
 
             Connections {
-                target: view.item
+                target: viewLoader.item
                 onClosing: {
-                    view.source = root.defaultView;
                     mainToolButtons.current = null;
                 }
             }

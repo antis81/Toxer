@@ -29,9 +29,6 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
-import com.tox.qmlcomponents 1.0
-import com.tox.qmltypes 1.0
-
 import "base" as Base
 import "controls" as Controls
 
@@ -41,31 +38,16 @@ Base.MainViewBase {
     width: Math.min(280, Screen.width)
     height: Math.min(430, Screen.height)
 
-    readonly property url defaultView: "FriendsView.qml"
-
-    toxProfile.onIsOnlineChanged: {
-        selfInfo.statusLight.source = toxProfile.statusIcon();
-    }
-    toxProfile.onStatusChanged: {
-        selfInfo.statusLight = toxProfile.statusIcon();
-    }
-    toxProfile.onUserNameChanged: {
-        selfInfo.name.text = toxProfile.userName;
-    }
-    toxProfile.onStatusMessageChanged: {
-        selfInfo.statusMessage = toxProfile.statusMessage;
-    }
-
     ExclusiveGroup {
         id: mainToolButtons
 
         onCurrentChanged: {
             if (current === btnSettings) {
-                view.source = "settings/Overview.qml";
+                viewLoader.source = "settings/Overview.qml";
             } else if (current === btnAddFriend) {
-                view.source = "AddFriendView.qml";
+                viewLoader.source = "AddFriendView.qml";
             } else {
-                view.source = root.defaultView;
+                viewLoader.source = "";
             }
         }
     }
@@ -75,51 +57,25 @@ Base.MainViewBase {
 
         spacing: 0
 
-        Rectangle {
+        CurrentProfile {
             id: selfView
 
             Layout.fillWidth: true
-            Layout.minimumHeight: Math.max(root.height * 0.1, 40)
-            Layout.maximumHeight: 55
-
-            color: Style.color.alternateBase
-
-            FriendDelegate {
-                id: selfInfo
-
-                anchors.fill: parent
-                anchors.margins: parent.height * 0.1
-
-                // TODO: avatar, name and message should be editable.
-                //       a separate flyout dialog makes sense to retain the ui
-                //       scalable to any screen format
-
-                avatar.source: {
-                    var url = Toxer.avatarsUrl() + "/" +
-                            toxProfile.publicKeyStr().toUpperCase() + ".png"
-                    return Toxer.exists(url) ? url : Style.icon.noAvatar;
-                }
-
-                name.text: toxProfile.userName();
-                statusMessage.text: toxProfile.statusMessage()
-                statusLight.source: toxProfile.statusIcon()
-            }
+            Layout.minimumHeight: Math.max(root.height * 0.1)
+            Layout.maximumHeight: 30
         }
 
-        Loader {
-            id: view
+        ViewLoader {
+            id: viewLoader
 
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            Component.onCompleted: {
-                view.source = root.defaultView;
-            }
+            defaultView: "FriendsView.qml"
 
             Connections {
-                target: view.item
+                target: viewLoader.item
                 onClosing: {
-                    view.source = root.defaultView;
                     mainToolButtons.current = null;
                 }
             }

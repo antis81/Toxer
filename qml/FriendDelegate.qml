@@ -26,8 +26,8 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
-import "." // QTBUG-34418
-import "controls"
+
+import "controls" as Controls
 
 Item {
     id: root
@@ -63,7 +63,7 @@ Item {
             Layout.minimumHeight: 12
             Layout.fillWidth: true
 
-            Text {
+            Controls.Text {
                 id: name
 
                 width: parent.width
@@ -72,7 +72,7 @@ Item {
                 text: "<alias>"
             }
 
-            Text {
+            Controls.Text {
                 id: statusMessage
 
                 width: parent.width

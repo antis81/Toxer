@@ -10,7 +10,6 @@
         <file>SelectProfile.qml</file>
         <file>CreateProfile.qml</file>
         <file>controls/FlatButton.qml</file>
-        <file>AppActions.qml</file>
         <file>settings/Appearance.qml</file>
         <file>controls/Text.qml</file>
         <file>AddFriendView.qml</file>
@@ -20,6 +19,8 @@
         <file>MainViewSplit.qml</file>
         <file>base/MainViewBase.qml</file>
         <file>base/Page.qml</file>
-        <file>base/SubPage.qml</file>
+        <file>base/View.qml</file>
+        <file>CurrentProfile.qml</file>
+        <file>ViewLoader.qml</file>
     </qresource>
 </RCC>

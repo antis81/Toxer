@@ -24,9 +24,9 @@
  * IN THE SOFTWARE.
  */
 
-import QtQuick 2.0
+import QtQuick 2.7
 
-import ".."
+import ".." // QTBUG-34418
 
 Rectangle {
     id: root
@@ -36,7 +36,12 @@ Rectangle {
 
     color: Style.color.base
 
-    AppActions {
-        id: appActions
+    readonly property alias appQuitShortcut: appQuitShortcut
+
+    Shortcut {
+        id: appQuitShortcut
+        sequence: StandardKey.Quit
+        context: Qt.ApplicationShortcut
+        onActivated: Qt.quit()
     }
 }

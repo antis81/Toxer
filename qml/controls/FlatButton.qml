@@ -28,7 +28,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.4
 
 import "." as Controls
-import ".."
+import ".." // QTBUG-34418
 
 Rectangle {
     id: root

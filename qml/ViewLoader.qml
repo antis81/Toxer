@@ -10,15 +10,13 @@ Loader {
 
     focus: true
 
-    onSourceChanged: {
-        if (!root.source) {
-            root.source = defaultView
-        }
-    }
-
     onItemChanged: {
-        if (item && typeof(item.viewLoader) !== "undefined") {
-            item.viewLoader = root;
+        if (item) {
+            if (typeof(item.viewLoader) !== "undefined") {
+                item.viewLoader = root;
+            }
+        } else if (defaultView){
+            root.source = root.defaultView
         }
     }
 

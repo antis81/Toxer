@@ -9,7 +9,7 @@ GIT_DEST_DIR="$PROJECT_DIR/src"
 
 QT_BASE_DIR=${QT_BASE_DIR:-"$HOME/Qt"}
 QT_TOOLCHAIN=${QT_TOOLCHAIN:-'gcc_64'}
-QT_VERSION=${QT_VERSION:-'5.6'}
+QT_VERSION=${QT_VERSION:-'5.9'}
 QT_DIR="$QT_BASE_DIR/$QT_VERSION/$QT_TOOLCHAIN"
 
 PATH="$QT_DIR/bin:$PATH"
@@ -30,10 +30,7 @@ else
   echo "Cloned Toxer sources to $GIT_DEST_DIR."
 fi
 
-echo '[Step #2 - Fetch toxcore sources]'
-"$SCRIPT_DIR/scripts/getToxCore.sh"
-
-echo '[Step #3 - Setup CMake build environment]'
+echo '[Step #2 - Setup CMake build environment]'
 
 PREV_DIR=$PWD
 mkdir -p "$PROJECT_DIR/build"

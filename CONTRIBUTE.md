@@ -71,7 +71,7 @@ Having a great idea to improve Toxer? Feel welcome. However, if you want to cont
 ## Code with style
 If this is the first project you are contributing to, you should know coders care about "how readable code is". We call this the "Code-Style" and every project has one. The good news for Toxer is: We are using a relaxed Code-Style. There's only the following few rules that apply.
 
-### Rule \1: break at **80 columns**
+### Rule \#1: break at **80 columns**
 
 Example:
 ```c++
@@ -122,9 +122,9 @@ If you have not yet read the [Code-Style](#code-with-style), please do so before
 
 Library/Binaries | Minimum Version
 ---- | ----
-Qt | >= 5.6
-CMake | >= 3.5
-toktok/c-toxcore | >= 0.1.3
+Qt | 5.9
+CMake | 3.5
+toktok/c-toxcore | any
 
 If you have these installed, you are all set up and the fun can begin!
 
@@ -142,8 +142,13 @@ The processs to building Toxer is pretty much straight forward and requires no s
 # go to project directory…
 cd /path/to/Toxer
 
-# …and fetch the toktok/c-toxcore sources into "lib/toxcore" directory
-./scripts/getToxCore.sh
+# …and run the "configure" script
+./configure
+
+# note:
+# The top section of the script defines some variables, that can be used
+# to adjust to your system. For example:
+# QT_VERSION='5.10' ./configure
 ```
 
 From here you have two options to build.

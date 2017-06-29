@@ -3,9 +3,10 @@
 SCRIPT_DIR=$(dirname `readlink -f -- $0`)
 
 PROJECT_DIR=$SCRIPT_DIR
-GIT_REMOTE=${GIT_REMOTE:-'https://gitlab.com/antis81/toxer-core.git'}
-GIT_BRANCH=${GIT_BRANCH:-'master'}
-GIT_DEST_DIR="$PROJECT_DIR/src"
+TOXER_BUILD_DIR=${TOXER_BUILD_DIR:-"$PROJECT_DIR/build/Toxer-Desktop/Release"}
+TOXER_CORE_URL=${TOXER_CORE_URL:-'https://gitlab.com/antis81/toxer-core.git'}
+TOXER_CORE_BRANCH=${TOXER_CORE_BRANCH:-'master'}
+TOXER_CORE_WORKTREE="$PROJECT_DIR/src"
 
 QT_BASE_DIR=${QT_BASE_DIR:-"$HOME/Qt"}
 QT_TOOLCHAIN=${QT_TOOLCHAIN:-'gcc_64'}
@@ -14,29 +15,48 @@ QT_DIR="$QT_BASE_DIR/$QT_VERSION/$QT_TOOLCHAIN"
 
 PATH="$QT_DIR/bin:$PATH"
 
+# this function fetches and updates third party libs
+updateLib() {
+  WORKTREE="$PROJECT_DIR/lib/$1"
+  REMOTE_URL=$2
+  BRANCH=$3
+
+  if [ -d "$WORKTREE" ] ; then
+    echo "Found worktree directory at $WORKTREE."
+    echo "Fetching branch \"$BRANCH\""
+    git -C "$WORKTREE" fetch $REMOTE_URL $BRANCH
+    echo "Updated repository in $WORKTREE"
+  else
+    git clone -q --progress --no-checkout --depth=2 --branch="$BRANCH" \
+      $REMOTE_URL $WORKTREE
+    echo "Cloned Toxer sources to $WORKTREE."
+  fi
+
+  git -C "$WORKTREE" checkout -f --detach
+}
+
 echo 'Configuring Toxer for build…
 [Step #1 - Fetch Toxer core components]
 '
 
-if [ -d "$GIT_DEST_DIR" ] ; then
-  echo "Toxer core components directory exists. Fetching branch \"$GIT_BRANCH\""
-  git -C "$GIT_DEST_DIR" fetch $GIT_REMOTE $GIT_BRANCH
-  echo "Updated Toxer core components in $GIT_DEST_DIR"
+if [ -d "$TOXER_CORE_WORKTREE" ] ; then
+  echo "Toxer core components directory exists. Fetching branch \"$TOXER_CORE_BRANCH\""
+  git -C "$TOXER_CORE_WORKTREE" fetch $TOXER_CORE_URL $TOXER_CORE_BRANCH
+  echo "Updated Toxer core components in $TOXER_CORE_WORKTREE"
 else
-  git clone -q --progress --no-checkout --branch="$GIT_BRANCH" \
-    $GIT_REMOTE $GIT_DEST_DIR
-  git -C "$GIT_DEST_DIR" checkout
-  git -C "$GIT_DEST_DIR" config commit.gpgsign 'true'
-  echo "Cloned Toxer sources to $GIT_DEST_DIR."
+  git clone -q --progress --no-checkout --branch="$TOXER_CORE_BRANCH" \
+    $TOXER_CORE_URL $TOXER_CORE_WORKTREE
+  git -C "$TOXER_CORE_WORKTREE" config commit.gpgsign 'true'
+  git -C "$TOXER_CORE_WORKTREE" checkout
+  echo "Cloned Toxer sources to $TOXER_CORE_WORKTREE."
 fi
 
 echo '[Step #2 - Setup CMake build environment]'
 
-PREV_DIR=$PWD
-mkdir -p "$PROJECT_DIR/build"
-cd "$PROJECT_DIR/build"
-cmake ..
-cd "$PREV_DIR"
+mkdir -p "$TOXER_BUILD_DIR"
+cd "$TOXER_BUILD_DIR"
+cmake "$PROJECT_DIR"
+cd -
 
 echo 'Toxer configuration finished! To build Toxer run
   make -j$(nproc) -C build

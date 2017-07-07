@@ -7,3 +7,5 @@
 # libs
 lib/*/
 
+# outsource ui components
+qml/

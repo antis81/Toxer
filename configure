@@ -4,9 +4,6 @@ SCRIPT_DIR=$(dirname `readlink -f -- $0`)
 
 PROJECT_DIR=$SCRIPT_DIR
 TOXER_BUILD_DIR=${TOXER_BUILD_DIR:-"$PROJECT_DIR/build/Toxer-Desktop/Release"}
-TOXER_CORE_URL=${TOXER_CORE_URL:-'https://gitlab.com/antis81/toxer-core.git'}
-TOXER_CORE_BRANCH=${TOXER_CORE_BRANCH:-'master'}
-TOXER_CORE_WORKTREE="$PROJECT_DIR/src"
 
 QT_BASE_DIR=${QT_BASE_DIR:-"$HOME/Qt"}
 QT_TOOLCHAIN=${QT_TOOLCHAIN:-'gcc_64'}
@@ -36,19 +33,9 @@ updateLib() {
 }
 
 echo 'Configuring Toxer for build…
-[Step #1 - Fetch Toxer core components]
 '
 
-if [ -d "$TOXER_CORE_WORKTREE" ] ; then
-  echo "Toxer core components directory exists. Fetching branch \"$TOXER_CORE_BRANCH\""
-  git -C "$TOXER_CORE_WORKTREE" fetch $TOXER_CORE_URL $TOXER_CORE_BRANCH
-  echo "Updated Toxer core components in $TOXER_CORE_WORKTREE"
 else
-  git clone -q --progress --no-checkout --branch="$TOXER_CORE_BRANCH" \
-    $TOXER_CORE_URL $TOXER_CORE_WORKTREE
-  git -C "$TOXER_CORE_WORKTREE" config commit.gpgsign 'true'
-  git -C "$TOXER_CORE_WORKTREE" checkout
-  echo "Cloned Toxer sources to $TOXER_CORE_WORKTREE."
 fi
 
 echo '[Step #2 - Setup CMake build environment]'

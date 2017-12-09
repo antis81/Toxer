@@ -51,12 +51,12 @@ public:
     }
 
     template<typename T>
-    inline static QVariant toQVariant(const T& enumeration) {
+    inline static QVariant toQVariant(T enumeration) {
         return QVariant::fromValue<T>(enumeration);
     }
 
     template<typename T>
-    inline static QString enumKey(const T& enumeration) {
+    inline static QString enumKey(T enumeration) {
         QMetaEnum me = QMetaEnum::fromType<T>();
         return QString::fromUtf8(me.valueToKey(static_cast<int>(enumeration)));
     }

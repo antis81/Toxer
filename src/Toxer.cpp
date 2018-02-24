@@ -134,6 +134,26 @@ ToxProfileQuery::ToxProfileQuery(QObject* parent)
 {
 }
 
+void ToxProfileQuery::on_user_name_changed(const QString& userName)
+{
+    emit userNameChanged(userName);
+}
+
+void ToxProfileQuery::on_is_online_changed(bool online)
+{
+    emit isOnlineChanged(online);
+}
+
+void ToxProfileQuery::on_status_message_changed(const QString& message)
+{
+    emit statusMessageChanged(message);
+}
+
+void ToxProfileQuery::on_status_changed(int status)
+{
+    emit statusChanged(status);
+}
+
 /**
 @brief Returns the profile name.
 @return the valid profile name or an empty string
@@ -361,6 +381,36 @@ ToxFriendQuery::ToxFriendQuery(QObject* parent)
 */
 ToxFriendQuery::~ToxFriendQuery()
 {
+}
+
+void ToxFriendQuery::on_name_changed(int index, const QString& name)
+{
+    emit nameChanged(index, name);
+}
+
+void ToxFriendQuery::on_status_message_changed(int index, const QString& message)
+{
+    emit statusMessageChanged(index, message);
+}
+
+void ToxFriendQuery::on_status_changed(int index, quint8 status)
+{
+    emit statusChanged(index, status);
+}
+
+void ToxFriendQuery::on_is_online_changed(int index, bool online)
+{
+    emit isOnlineChanged(index, online);
+}
+
+void ToxFriendQuery::on_is_typing_changed(int index, bool typing)
+{
+    emit isTypingChanged(index, typing);
+}
+
+void ToxFriendQuery::on_message(int index, const QString& message)
+{
+    emit this->message(index, message);
 }
 
 /**

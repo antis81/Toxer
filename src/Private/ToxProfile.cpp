@@ -256,7 +256,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
     {
         if (activeProfile) {
             for (auto n : activeProfile->profileNotifiers) {
-                n->isOnlineChanged(status != TOX_CONNECTION_NONE);
+                n->on_is_online_changed(status != TOX_CONNECTION_NONE);
             }
         }
     });
@@ -268,7 +268,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
         if (activeProfile){
             int index = static_cast<int>(c_index);
             for (auto n : activeProfile->friendNotifiers) {
-                n->isOnlineChanged(index, status != TOX_CONNECTION_NONE);
+                n->on_is_online_changed(index, status != TOX_CONNECTION_NONE);
             }
         }
     });
@@ -283,7 +283,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
             int len = static_cast<int>(c_len);
             QString nameStr = QString::fromUtf8(name, len);
             for (auto n : activeProfile->friendNotifiers) {
-                n->nameChanged(index, nameStr);
+                n->on_name_changed(index, nameStr);
             }
         }
     });
@@ -299,7 +299,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
             int len = static_cast<int>(c_len);
             QString messageStr = QString::fromUtf8(message, len);
             for (auto n : activeProfile->friendNotifiers) {
-                n->statusMessageChanged(index, messageStr);
+                n->on_status_message_changed(index, messageStr);
             }
         }
     });
@@ -311,7 +311,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
         if (activeProfile) {
             int index = static_cast<int>(c_index);
             for (auto n : activeProfile->friendNotifiers) {
-                n->statusChanged(index, static_cast<quint8>(status));
+                n->on_status_changed(index, static_cast<quint8>(status));
             }
         }
     });
@@ -329,7 +329,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
             int len = static_cast<int>(c_len);
             QString messageStr = QString::fromUtf8(message, len);
             for (auto n : activeProfile->friendNotifiers) {
-                n->message(index, messageStr);
+                n->on_message(index, messageStr);
             }
         }
     });

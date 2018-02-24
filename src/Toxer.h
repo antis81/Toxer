@@ -66,6 +66,14 @@ class ToxProfileQuery : public QObject, IToxProfileNotifier
 public:
     ToxProfileQuery(QObject* parent = nullptr);
 
+public:
+    // IToxProfileNotifier interface
+    void on_user_name_changed(const QString& userName) override;
+    void on_is_online_changed(bool online) override;
+    void on_status_message_changed(const QString& message) override;
+    void on_status_changed(int status) override;
+
+public:
     Q_INVOKABLE QString name() const;
 
     Q_INVOKABLE QString userName() const;
@@ -80,19 +88,27 @@ public:
     Q_INVOKABLE void setStatus(quint8 newValue);
 
 signals:
-    void userNameChanged(const QString& userName) final;
-    void isOnlineChanged(bool online) final;
-    void statusMessageChanged(const QString& statusMessage) final;
-    void statusChanged(int status) final;
+    void userNameChanged(const QString& userName);
+    void isOnlineChanged(bool online);
+    void statusMessageChanged(const QString& statusMessage);
+    void statusChanged(int status);
 };
 
 class ToxFriendQuery : public QObject, IToxFriendNotifier
 {
     Q_OBJECT
-
 public:
     ToxFriendQuery(QObject* parent = nullptr);
     ~ToxFriendQuery();
+
+public:
+    // IToxFriendNotifier interface
+    void on_name_changed(int index, const QString& name) override;
+    void on_status_message_changed(int index, const QString& message) override;
+    void on_status_changed(int index, quint8 status) override;
+    void on_is_online_changed(int index, bool online) override;
+    void on_is_typing_changed(int index, bool typing) override;
+    void on_message(int index, const QString& message) override;
 
 public:
     Q_INVOKABLE int count() const;
@@ -107,12 +123,12 @@ public:
     Q_INVOKABLE bool isTyping(int index) const;
 
 signals:
-    void nameChanged(int index, const QString& name) final;
-    void statusMessageChanged(int index, const QString& statusMessage) final;
-    void statusChanged(int index, quint8 status) final;
-    void isOnlineChanged(int index, bool online) final;
-    void isTypingChanged(int index, bool typing) final;
-    void message(int index, const QString& message) final;
+    void nameChanged(int index, const QString& name);
+    void statusMessageChanged(int index, const QString& statusMessage);
+    void statusChanged(int index, quint8 status);
+    void isOnlineChanged(int index, bool online);
+    void isTypingChanged(int index, bool typing);
+    void message(int index, const QString& message);
 };
 
 class ToxMessenger : public ToxFriendQuery

@@ -38,12 +38,12 @@ protected:
     virtual ~IToxFriendNotifier();
 
 public:
-    virtual void nameChanged(int index, const QString& name) = 0;
-    virtual void statusMessageChanged(int index, const QString& message) = 0;
-    virtual void statusChanged(int index, quint8 status) = 0;
-    virtual void isOnlineChanged(int index, bool online) = 0;
-    virtual void isTypingChanged(int index, bool typing) = 0;
-    virtual void message(int index, const QString& message) = 0;
+    virtual void on_name_changed(int index, const QString& name) = 0;
+    virtual void on_status_message_changed(int index, const QString& message) = 0;
+    virtual void on_status_changed(int index, quint8 status) = 0;
+    virtual void on_is_online_changed(int index, bool online) = 0;
+    virtual void on_is_typing_changed(int index, bool typing) = 0;
+    virtual void on_message(int index, const QString& message) = 0;
 };
 
 class IToxProfileNotifier
@@ -53,10 +53,10 @@ protected:
     virtual ~IToxProfileNotifier();
 
 public:
-    virtual void userNameChanged(const QString& userName) = 0;
-    virtual void isOnlineChanged(bool online) = 0;
-    virtual void statusMessageChanged(const QString& message) = 0;
-    virtual void statusChanged(int status) = 0;
+    virtual void on_user_name_changed(const QString& userName) = 0;
+    virtual void on_is_online_changed(bool online) = 0;
+    virtual void on_status_message_changed(const QString& message) = 0;
+    virtual void on_status_changed(int status) = 0;
 };
 
 #endif

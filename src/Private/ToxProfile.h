@@ -98,6 +98,12 @@ public:
     void addNotificationObserver(IToxProfileNotifier* notify);
     void removeNotificationObserver(IToxProfileNotifier* notify);
 
+public:
+    // profile notifiers
+    void on_status_changed(int status);
+    void on_status_message_changed(const QString& message);
+    void on_user_name_changed(const QString& userName);
+
 private:
     QString mName;
     ToxEventLoop* mTEL;

@@ -378,3 +378,30 @@ void ToxProfilePrivate::removeNotificationObserver(IToxProfileNotifier* notify)
 {
     profileNotifiers.removeAll(notify);
 }
+
+void ToxProfilePrivate::on_status_changed(int status)
+{
+    if (activeProfile) {
+        for (auto n : activeProfile->profileNotifiers) {
+            n->on_status_changed(status != TOX_CONNECTION_NONE);
+        }
+    }
+}
+
+void ToxProfilePrivate::on_status_message_changed(const QString& message)
+{
+    if (activeProfile) {
+        for (auto n : activeProfile->profileNotifiers) {
+            n->on_status_message_changed(message);
+        }
+    }
+}
+
+void ToxProfilePrivate::on_user_name_changed(const QString& userName)
+{
+    if (activeProfile) {
+        for (auto n : activeProfile->profileNotifiers) {
+            n->on_user_name_changed(userName);
+        }
+    }
+}

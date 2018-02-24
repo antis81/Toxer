@@ -201,7 +201,7 @@ void ToxProfileQuery::setUserName(const QString& newValue)
     ToxProfilePrivate* p = ToxProfilePrivate::current();
     QString oldValue = userName();
     if (p && newValue != oldValue) {
-        p->toxSet([&newValue](Tox* tox) {
+        p->toxSet([&p, &newValue](Tox* tox) {
             QByteArray str = newValue.toUtf8();
             const uint8_t* c_str =
                     reinterpret_cast<const uint8_t*>(str.constData());
@@ -211,11 +211,11 @@ void ToxProfileQuery::setUserName(const QString& newValue)
             if (err) {
                 qWarning("Could not set user name: %s",
                          ToxerPrivate::toxErrStr(err));
+            } else {
+                p->on_user_name_changed(newValue);
             }
         });
     }
-
-    emit userNameChanged(newValue);
 }
 
 /**
@@ -253,20 +253,20 @@ void ToxProfileQuery::setStatusMessage(const QString& newValue)
     ToxProfilePrivate* p = ToxProfilePrivate::current();
     QString oldValue = userName();
     if (p && newValue != oldValue) {
-        p->toxSet([&newValue](Tox* tox) {
+        p->toxSet([&p, &newValue](Tox* tox) {
             QByteArray str = newValue.toUtf8();
             const uint8_t* c_str =
                     reinterpret_cast<const uint8_t*>(str.constData());
             size_t c_len = static_cast<size_t>(newValue.length());
             TOX_ERR_SET_INFO err = TOX_ERR_SET_INFO_OK;
-            tox_self_set_name(tox, c_str, c_len, &err);
+            tox_self_set_status_message(tox, c_str, c_len, &err);
             if (err) {
                 qWarning("Could not set user name: %s",
                          ToxerPrivate::toxErrStr(err));
+            } else {
+                p->on_status_message_changed(newValue);
             }
         });
-
-        emit statusMessageChanged(newValue);
     }
 }
 
@@ -357,13 +357,12 @@ void ToxProfileQuery::setStatus(quint8 newValue)
     ToxProfilePrivate* p = ToxProfilePrivate::current();
     quint8 oldStatus = statusInt();
     if (p && newValue != oldStatus) {
-        p->toxSet([&newValue](Tox* tox) {
+        p->toxSet([&p, &newValue](Tox* tox) {
             ToxTypes::UserStatus c_status =
                     static_cast<ToxTypes::UserStatus>(newValue);
             tox_self_set_status(tox, ToxerPrivate::toTox(c_status));
+            p->on_status_changed(newValue);
         });
-
-        emit statusChanged(newValue);
     }
 }
 

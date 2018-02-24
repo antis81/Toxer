@@ -46,26 +46,47 @@ The profile's public key can be returned by passing -1 as the friendIndex.
 */
 
 /**
-@brief ToxerPrivate::toxErrStr
-@param err
-@return
+@brief Maps a Tox error to a readable message.
+@param[in] err  the error number
+@param[in] ctx  the error context
+@return The message.
 */
-const char* ToxerPrivate::toxErrStr(int err)
+const char* ToxerPrivate::toxErrStr(int err, ToxContext ctx)
 {
-    switch (err) {
-    case TOX_ERR_NEW_OK: return "no error";
-    case TOX_ERR_NEW_NULL: return "One of the arguments was NULL.";
-    case TOX_ERR_NEW_MALLOC: return "out of memory";
+    if (!err) {
+        return "no error";
+    }
 
-    case TOX_ERR_NEW_LOAD_BAD_FORMAT: return "invalid savefile format";
-    case TOX_ERR_NEW_LOAD_ENCRYPTED: return  "decryption failed";
-    case TOX_ERR_NEW_PORT_ALLOC: return "out of resources";
-    case TOX_ERR_NEW_PROXY_BAD_HOST: return "invalid proxy hostname";
-    case TOX_ERR_NEW_PROXY_BAD_PORT: return "invalid proxy port";
-    case TOX_ERR_NEW_PROXY_BAD_TYPE: return "proxy type not supported";
-    case TOX_ERR_NEW_PROXY_NOT_FOUND: return "proxy host not found";
+    switch (ctx) {
+    case ToxContext::Common:
+        switch (err) {
+        case TOX_ERR_NEW_NULL:      return "One of the arguments was NULL.";
+        case TOX_ERR_NEW_MALLOC:    return "out of memory";
 
-    // TODO: complete the error type list
+        case TOX_ERR_NEW_LOAD_BAD_FORMAT: return "invalid savefile format";
+        case TOX_ERR_NEW_LOAD_ENCRYPTED: return  "decryption failed";
+        case TOX_ERR_NEW_PORT_ALLOC: return "out of resources";
+        case TOX_ERR_NEW_PROXY_BAD_HOST: return "invalid proxy hostname";
+        case TOX_ERR_NEW_PROXY_BAD_PORT: return "invalid proxy port";
+        case TOX_ERR_NEW_PROXY_BAD_TYPE: return "proxy type not supported";
+        case TOX_ERR_NEW_PROXY_NOT_FOUND: return "proxy host not found";
+        }
+        break;
+    case ToxContext::FriendAdd: switch(err) {
+        case TOX_ERR_FRIEND_ADD_NULL:           return toxErrStr(TOX_ERR_NEW_NULL);
+        case TOX_ERR_FRIEND_ADD_TOO_LONG:       return "friend request message too long";
+        case TOX_ERR_FRIEND_ADD_NO_MESSAGE:     return "friend request is empty";
+        case TOX_ERR_FRIEND_ADD_OWN_KEY:        return "own PK cannot be added as friend";
+        case TOX_ERR_FRIEND_ADD_ALREADY_SENT:   return "friend request already sent";
+        case TOX_ERR_FRIEND_ADD_BAD_CHECKSUM:   return "wrong checksum on friend PK";
+        case TOX_ERR_FRIEND_ADD_SET_NEW_NOSPAM: return "friend exists with different NOSPAM";
+        case TOX_ERR_FRIEND_ADD_MALLOC:         return toxErrStr(TOX_ERR_NEW_MALLOC);
+        }
+        break;
+    case ToxContext::FriendDelete: switch(err) {
+        case TOX_ERR_FRIEND_DELETE_FRIEND_NOT_FOUND: return "friend not found";
+        }
+        break;
     }
 
     return "unknown error";

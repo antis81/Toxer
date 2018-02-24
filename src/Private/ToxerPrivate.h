@@ -47,6 +47,12 @@ class ToxerPrivate final
 public:
     using PassKeyPtr = std::shared_ptr<Tox_Pass_Key>;
 
+    enum class ToxContext {
+        Common,
+        FriendAdd,
+        FriendDelete
+    };
+
 private:
     ToxerPrivate() = delete;
     ~ToxerPrivate() = delete;
@@ -87,7 +93,7 @@ public:
     }
 
 public:
-    static const char* toxErrStr(int err);
+    static const char* toxErrStr(int err, ToxContext ctx = ToxContext::Common);
     static bool isEncrypted(const char* data);
     static PassKeyPtr createKey(const char* data, int len, const char* salt);
     static QByteArray encrypt(const char* rawData, int len,

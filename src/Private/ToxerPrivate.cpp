@@ -80,20 +80,13 @@ bool ToxerPrivate::isEncrypted(const char* data)
 ToxerPrivate::PassKeyPtr ToxerPrivate::createKey(const char* data, int len,
                                                  const char* salt)
 {
-    PassKeyPtr key(tox_pass_key_new(), tox_pass_key_free);
-
     const uint8_t* c_salt = reinterpret_cast<const uint8_t*>(salt);
     const uint8_t* c_data = reinterpret_cast<const uint8_t*>(data);
     size_t c_len = static_cast<size_t>(len);
-
-    if (salt) {
-        tox_pass_key_derive_with_salt(key.get(), c_data, c_len,
-                                      c_salt, nullptr);
-    } else {
-        tox_pass_key_derive(key.get(), c_data, c_len, nullptr);
-    }
-
-    return key;
+    Tox_Pass_Key* k =
+            salt ? tox_pass_key_derive_with_salt(c_data, c_len, c_salt, nullptr)
+                 : tox_pass_key_derive(c_data, c_len, nullptr);
+    return PassKeyPtr(k, tox_pass_key_free);
 }
 
 /**

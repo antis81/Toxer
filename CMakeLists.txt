@@ -39,13 +39,6 @@ ADD_SUBDIRECTORY (lib)
 SET (TOX_LIBS
     toxencryptsave
     toxcore
-    toxgroup
-    toxmessenger
-    toxfriends
-    toxnetcrypto
-    toxdht
-    toxnetwork
-    toxcrypto
     )
 
 IF (TOXER_STATIC)

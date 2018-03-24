@@ -37,7 +37,6 @@ SET (CMAKE_AUTOMOC ON)
 ADD_SUBDIRECTORY (lib)
 
 SET (TOX_LIBS
-    toxencryptsave
     toxcore
     )
 

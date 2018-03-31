@@ -62,8 +62,6 @@ int main(int argc, char *argv[])
     view.rootContext()->setContextProperty(QStringLiteral("Toxer"), &toxer);
     view.setResizeMode(QQuickView::SizeRootObjectToView);
 
-    view.setSource(Toxer::profileSelector());
-
     QObject::connect(&toxer, &Toxer::reloadUi, [&view]()
     {
         const QUrl page = ToxProfilePrivate::current()
@@ -84,7 +82,8 @@ int main(int argc, char *argv[])
 
     QQmlEngine* engine = view.engine();
     QObject::connect(engine, &QQmlEngine::quit, &app, &QGuiApplication::quit);
-
+    engine->addImportPath(QStringLiteral("qrc:/qml"));
+    view.setSource(Toxer::profileSelector());
     view.show();
 
     return app.exec();

@@ -96,10 +96,14 @@ private:
 class ToxFriendQuery : public QObject, IToxFriendNotifier
 {
     Q_OBJECT
+    Q_PROPERTY(int count
+               READ count
+               NOTIFY countChanged)
 public:
     ToxFriendQuery(QObject* parent = nullptr);
 
 public:
+    int count() const;
 
     Q_INVOKABLE QList<int> friends() const;
 

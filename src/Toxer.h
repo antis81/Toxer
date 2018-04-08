@@ -62,16 +62,8 @@ signals:
 class ToxProfileQuery : public QObject, IToxProfileNotifier
 {
     Q_OBJECT
-
 public:
     ToxProfileQuery(QObject* parent = nullptr);
-
-public:
-    // IToxProfileNotifier interface
-    void on_user_name_changed(const QString& userName) override;
-    void on_is_online_changed(bool online) override;
-    void on_status_message_changed(const QString& message) override;
-    void on_status_changed(int status) override;
 
 public:
     Q_INVOKABLE QString name() const;
@@ -92,6 +84,13 @@ signals:
     void isOnlineChanged(bool online);
     void statusMessageChanged(const QString& statusMessage);
     void statusChanged(int status);
+
+private:
+    // IToxProfileNotifier interface
+    void on_user_name_changed(const QString& userName) override;
+    void on_is_online_changed(bool online) override;
+    void on_status_message_changed(const QString& message) override;
+    void on_status_changed(int status) override;
 };
 
 class ToxFriendQuery : public QObject, IToxFriendNotifier
@@ -99,19 +98,9 @@ class ToxFriendQuery : public QObject, IToxFriendNotifier
     Q_OBJECT
 public:
     ToxFriendQuery(QObject* parent = nullptr);
-    ~ToxFriendQuery();
 
 public:
-    // IToxFriendNotifier interface
-    void on_name_changed(int index, const QString& name) override;
-    void on_status_message_changed(int index, const QString& message) override;
-    void on_status_changed(int index, quint8 status) override;
-    void on_is_online_changed(int index, bool online) override;
-    void on_is_typing_changed(int index, bool typing) override;
-    void on_message(int index, const QString& message) override;
 
-public:
-    Q_INVOKABLE int count() const;
     Q_INVOKABLE QList<int> friends() const;
 
     Q_INVOKABLE QString publicKeyStr(int index) const;
@@ -123,12 +112,26 @@ public:
     Q_INVOKABLE bool isTyping(int index) const;
 
 signals:
+    void countChanged();
+    void added(int index);
+    void removed(int index);
     void nameChanged(int index, const QString& name);
     void statusMessageChanged(int index, const QString& statusMessage);
     void statusChanged(int index, quint8 status);
     void isOnlineChanged(int index, bool online);
     void isTypingChanged(int index, bool typing);
     void message(int index, const QString& message);
+
+private:
+    // IToxFriendNotifier interface
+    void on_added(int index) override;
+    void on_deleted(int index) override;
+    void on_name_changed(int index, const QString& name) override;
+    void on_status_message_changed(int index, const QString& message) override;
+    void on_status_changed(int index, quint8 status) override;
+    void on_is_online_changed(int index, bool online) override;
+    void on_is_typing_changed(int index, bool typing) override;
+    void on_message(int index, const QString& message) override;
 };
 
 class ToxMessenger : public ToxFriendQuery

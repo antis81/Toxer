@@ -38,6 +38,8 @@ protected:
     virtual ~IToxFriendNotifier();
 
 public:
+    virtual void on_added(int index) = 0;
+    virtual void on_deleted(int index) = 0;
     virtual void on_name_changed(int index, const QString& name) = 0;
     virtual void on_status_message_changed(int index, const QString& message) = 0;
     virtual void on_status_changed(int index, quint8 status) = 0;

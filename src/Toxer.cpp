@@ -134,21 +134,37 @@ ToxProfileQuery::ToxProfileQuery(QObject* parent)
 {
 }
 
+/**
+@brief profile user name changed notifier
+@param userName     the user name
+*/
 void ToxProfileQuery::on_user_name_changed(const QString& userName)
 {
     emit userNameChanged(userName);
 }
 
+/**
+@brief profile is online changed notifier
+@param online   the online status
+*/
 void ToxProfileQuery::on_is_online_changed(bool online)
 {
     emit isOnlineChanged(online);
 }
 
+/**
+@brief profile status message changed notifier
+@param message  the status message
+*/
 void ToxProfileQuery::on_status_message_changed(const QString& message)
 {
     emit statusMessageChanged(message);
 }
 
+/**
+@brief profile status changed notifier
+@param status   the user status
+*/
 void ToxProfileQuery::on_status_changed(int status)
 {
     emit statusChanged(status);
@@ -376,43 +392,6 @@ ToxFriendQuery::ToxFriendQuery(QObject* parent)
 }
 
 /**
-@brief ToxFriendQuery destructor
-*/
-ToxFriendQuery::~ToxFriendQuery()
-{
-}
-
-void ToxFriendQuery::on_name_changed(int index, const QString& name)
-{
-    emit nameChanged(index, name);
-}
-
-void ToxFriendQuery::on_status_message_changed(int index, const QString& message)
-{
-    emit statusMessageChanged(index, message);
-}
-
-void ToxFriendQuery::on_status_changed(int index, quint8 status)
-{
-    emit statusChanged(index, status);
-}
-
-void ToxFriendQuery::on_is_online_changed(int index, bool online)
-{
-    emit isOnlineChanged(index, online);
-}
-
-void ToxFriendQuery::on_is_typing_changed(int index, bool typing)
-{
-    emit isTypingChanged(index, typing);
-}
-
-void ToxFriendQuery::on_message(int index, const QString& message)
-{
-    emit this->message(index, message);
-}
-
-/**
 @brief Returns the number of friends for the active profile.
 */
 int ToxFriendQuery::count() const
@@ -601,6 +580,80 @@ bool ToxFriendQuery::isTyping(int index) const
     } else {
         return false;
     }
+}
+
+/**
+@brief friend added notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_added(int index)
+{
+    emit added(index);
+    emit countChanged();
+}
+
+/**
+@brief friend deleted notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_deleted(int index)
+{
+    emit removed(index);
+    emit countChanged();
+}
+
+/**
+@brief friend name changed notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_name_changed(int index, const QString& name)
+{
+    emit nameChanged(index, name);
+}
+
+/**
+@brief friend status message changed notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_status_message_changed(int index, const QString& message)
+{
+    emit statusMessageChanged(index, message);
+}
+
+/**
+@brief friend status changed notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_status_changed(int index, quint8 status)
+{
+    emit statusChanged(index, status);
+}
+
+/**
+@brief friend is online changed notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_is_online_changed(int index, bool online)
+{
+    emit isOnlineChanged(index, online);
+}
+
+/**
+@brief friend is typing notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_is_typing_changed(int index, bool typing)
+{
+    emit isTypingChanged(index, typing);
+}
+
+/**
+@brief friend message received notifier
+@param index    the friend index
+*/
+void ToxFriendQuery::on_message(int index, const QString& message)
+{
+    emit this->message(index, message);
 }
 
 /**

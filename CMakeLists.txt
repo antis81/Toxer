@@ -5,17 +5,26 @@ if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set (PROJECT_VERSION_MAJOR 1)
-set (PROJECT_VERSION_MINOR 0)
-set (PROJECT_VERSION_PATCH 0)
-set (PROJECT_VERSION_TWEAK "pre-alpha")
-set (PROJECT_VERSION
-    "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
-    )
-if (NOT PROJECT_VERSION_TWEAK STREQUAL "")
-    set (PROJECT_VERSION "${PROJECT_VERSION}-${PROJECT_VERSION_TWEAK}")
+# setup version string
+find_package(Git)
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags --long --always --dirty=-d
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        RESULT_VARIABLE git_result
+        OUTPUT_VARIABLE PROJECT_REVISION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_VARIABLE git_err
+        )
+    if (git_result EQUAL 0)
+        message(STATUS "Toxer Git-Hash: ${PROJECT_REVISION}")
+    else()
+        message(FATAL_ERROR "Git error: ${git_err}")
+    endif()
 endif()
-add_definitions (-DTOXER_VERSION="${PROJECT_VERSION}")
+if(NOT PROJECT_REVISION)
+    set(PROJECT_REVISION "DEVBUILD")
+endif()
+add_definitions(-DTOXER_VERSION="${PROJECT_REVISION}")
 
 set (CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake;${CMAKE_MODULE_PATH})
 set (CMAKE_CXX_STANDARD 11)

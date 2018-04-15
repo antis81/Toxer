@@ -28,6 +28,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickView>
+#include <QScreen>
 #include <QThread>
 
 #include "Private/ToxProfile.h"
@@ -47,6 +48,8 @@ inline static void registerQmlTypes() {
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
     app.thread()->setObjectName(QStringLiteral("MainThread"));
@@ -74,9 +77,12 @@ int main(int argc, char *argv[])
     });
 
     QObject::connect(&view, &QQuickView::statusChanged,
-                     [&view](QQuickView::Status status) {
+                     [&app, &view](QQuickView::Status status) {
         if (status == QQuickView::Ready) {
+            QScreen* screen = app.screens()[0];
             view.resize(view.initialSize());
+            QPoint sc = screen->geometry().center();
+            view.setPosition(sc.x() - (view.width() / 2), sc.y() - (view.height() / 2));
         }
     });
 

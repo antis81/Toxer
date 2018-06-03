@@ -94,13 +94,26 @@ const char* ToxerPrivate::toxErrStr(int err, ToxContext ctx)
 
 bool ToxerPrivate::isEncrypted(const char* data)
 {
+#ifdef SAILFISH
+    // TODO: Sailfish support
+    Q_UNUSED(data);
+    qWarning("TODO: Sailfish (Qt5.6) support for function %s", __func__);
+    return false;
+#else
     const uint8_t* c_data = reinterpret_cast<const uint8_t*>(data);
     return tox_is_data_encrypted(c_data);
+#endif
 }
 
 ToxerPrivate::PassKeyPtr ToxerPrivate::createKey(const char* data, int len,
                                                  const char* salt)
 {
+#ifdef SAILFISH
+    // TODO: Sailfish support
+    Q_UNUSED(data); Q_UNUSED(len); Q_UNUSED(salt);
+    qWarning("TODO: Sailfish (Qt5.6) support for function %s", __func__);
+    return nullptr;
+#else
     const uint8_t* c_salt = reinterpret_cast<const uint8_t*>(salt);
     const uint8_t* c_data = reinterpret_cast<const uint8_t*>(data);
     size_t c_len = static_cast<size_t>(len);
@@ -108,6 +121,7 @@ ToxerPrivate::PassKeyPtr ToxerPrivate::createKey(const char* data, int len,
             salt ? tox_pass_key_derive_with_salt(c_data, c_len, c_salt, nullptr)
                  : tox_pass_key_derive(c_data, c_len, nullptr);
     return PassKeyPtr(k, tox_pass_key_free);
+#endif
 }
 
 /**
@@ -116,6 +130,12 @@ ToxerPrivate::PassKeyPtr ToxerPrivate::createKey(const char* data, int len,
 QByteArray ToxerPrivate::encrypt(const char* rawData, int len,
                                  const ToxerPrivate::PassKeyPtr key)
 {
+#ifdef SAILFISH
+    // TODO: Sailfish support
+    Q_UNUSED(rawData); Q_UNUSED(len); Q_UNUSED(key);
+    qWarning("TODO: Sailfish (Qt5.6) support for function %s", __func__);
+    return nullptr;
+#else
     const uint8_t* c_data = reinterpret_cast<const uint8_t*>(rawData);
     size_t c_len = static_cast<size_t>(len);
 
@@ -129,6 +149,7 @@ QByteArray ToxerPrivate::encrypt(const char* rawData, int len,
     }
 
     return encrypted;
+#endif
 }
 
 /**
@@ -137,6 +158,12 @@ QByteArray ToxerPrivate::encrypt(const char* rawData, int len,
 QByteArray ToxerPrivate::decrypt(const char* encrypted, int len,
                                  const PassKeyPtr key)
 {
+#ifdef SAILFISH
+    // TODO: Sailfish support
+    Q_UNUSED(encrypted); Q_UNUSED(len); Q_UNUSED(key);
+    qWarning("TODO: Sailfish (Qt5.6) support for function %s", __func__);
+    return {};
+#else
     const uint8_t* c_encrypted = reinterpret_cast<const uint8_t*>(encrypted);
     size_t c_len = static_cast<size_t>(len);
 
@@ -153,6 +180,7 @@ QByteArray ToxerPrivate::decrypt(const char* encrypted, int len,
         qWarning("Decryption failed!");
         return {};
     }
+#endif
 }
 
 /**
@@ -163,6 +191,12 @@ The encryption key is generated from the UTF-8 encoded password.
 QByteArray ToxerPrivate::decrypt(const char* encrypted, int len,
                                  const QString& password)
 {
+#ifdef SAILFISH
+    // TODO: Sailfish support
+    Q_UNUSED(encrypted); Q_UNUSED(len); Q_UNUSED(password);
+    qWarning("TODO: Sailfish (Qt5.6) support for function %s", __func__);
+    return {};
+#else
     char salt[TOX_PASS_SALT_LENGTH];
     const uint8_t* c_encrypted = reinterpret_cast<const uint8_t*>(encrypted);
     uint8_t* c_salt = reinterpret_cast<uint8_t*>(salt);
@@ -174,6 +208,7 @@ QByteArray ToxerPrivate::decrypt(const char* encrypted, int len,
                                                              salt);
 
     return decrypt(encrypted, len, generated_key);
+#endif
 }
 
 /**

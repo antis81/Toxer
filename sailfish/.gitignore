@@ -1,0 +1,12 @@
+# ignore everything 
+/*
+
+# keep sailfish files only
+!/.gitignore
+!/env
+!/*.sh
+!/icons/
+!/rpm/
+!/*.desktop
+!/*.png
+!/README.md

@@ -1,6 +1,16 @@
 project (Toxer)
 cmake_minimum_required (VERSION 3.5)
 
+if(POLICY CMP0071)
+    cmake_policy(SET CMP0071 NEW) # process MOC generated files
+endif()
+
+option(SAILFISH "Build for SailfishOS" OFF)
+option(SAILFISHAPP "Use libsailfishapp (implies SAILFISH=ON)" OFF)
+if (SAILFISHAPP)
+    set(SAILFISH ON)
+endif()
+
 if (NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -33,19 +43,33 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package (Qt5 COMPONENTS Core Network Qml Gui Quick REQUIRED)
 find_package (sodium REQUIRED)
 
+if(SAILFISHAPP)
+    include(FindPkgConfig)
+    pkg_search_module(SAILFISH sailfishapp REQUIRED)
+    add_definitions(-DSAILFISHAPP)
+endif()
+if(SAILFISH)
+    message("Building for SailfishOS…")
+    add_definitions(-DSAILFISH)
+endif()
+
 file (GLOB_RECURSE SCRIPTS "scripts/*.*")
 add_custom_target(scripts SOURCES ${SCRIPTS})
 
-qt5_add_resources (RESOURCES res/res.qrc qml/qml.qrc)
-set (QML_IMPORT_PATH "${PROJECT_SOURCE_DIR}/qml" CACHE STRING "Qt Creator extra qml import paths")
+qt5_add_resources(RESOURES res/res.qrc)
+if(SAILFISH)
+else()
+    qt5_add_resources (RESOURCES ${RESOURCES} qml/qml.qrc)
+endif()
+set(QML_IMPORT_PATH "${PROJECT_SOURCE_DIR}/qml" CACHE STRING "Qt Creator extra qml import paths")
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti")
-set (CMAKE_AUTOMOC ON)
-set (CMAKE_AUTORCC ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti")
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 add_subdirectory (lib)
 
-find_library(TOX_CORE toxcore)
+find_library(TOX_CORE toxcore REQUIRED)
 
 set (SRC_FILES ${SRC_FILES}
     src/IToxNotify.cpp
@@ -83,15 +107,41 @@ target_include_directories (toxer PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     >)
 
-target_link_libraries (toxer
-    Qt5::Quick
-
-    ${TOX_CORE}
-    sodium
-    )
+if(SAILFISHAPP)
+    target_include_directories (toxer PRIVATE
+        $<BUILD_INTERFACE:
+        ${SAILFISH_INCLUDE_DIRS}
+        >)
+    target_link_libraries (toxer
+        Qt5::Quick
+        ${TOX_CORE}
+        sodium
+        ${SAILFISH_LDFLAGS}
+        )
+else()
+    target_link_libraries (toxer
+        Qt5::Quick
+        ${TOX_CORE}
+        sodium
+        )
+endif()
 
 install (TARGETS
     toxer
     RUNTIME DESTINATION bin COMPONENT Runtime
     LIBRARY DESTINATION lib COMPONENT Runtime
     )
+
+if(SAILFISH)
+    install(DIRECTORY qml
+        DESTINATION share/toxer
+        )
+    install(FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/toxer.desktop
+        DESTINATION share/applications
+        )
+    install(FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/toxer.png
+        DESTINATION share/icons/hicolor/86x86/apps
+        )
+endif()

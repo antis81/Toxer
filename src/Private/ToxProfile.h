@@ -33,6 +33,10 @@
 #include <QThread>
 #include <QVector>
 
+#if (QT_VERSION <= QT_VERSION_CHECK(5,9,0))
+#include <functional>
+#endif
+
 class IToxFriendNotifier;
 class IToxProfileNotifier;
 

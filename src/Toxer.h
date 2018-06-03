@@ -38,6 +38,7 @@ class Toxer final : public QObject
     Q_OBJECT
 
 public:
+    static QString qmlLocation();
     static QUrl profileSelector();
     static QUrl mainView();
 

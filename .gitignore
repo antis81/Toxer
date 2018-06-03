@@ -1,6 +1,6 @@
 [Bb]uild/*
 *.depends
-*.user
+*.user*
 *.backup
 *.orig
 
@@ -9,3 +9,11 @@ lib/*/
 
 # outsource ui components
 qml/
+
+# sailfish package files
+/*.png
+/*.desktop
+/documentation.list
+/extra/
+/icons/
+/[RrPpMm]*/

@@ -33,9 +33,18 @@
 #include <QFileInfo>
 #include <QGuiApplication>
 
+QString Toxer::qmlLocation()
+{
+#ifdef SAILFISH
+    return QStringLiteral("/usr/share/toxer/qml");
+#else
+    return QStringLiteral("qrc:/qml");
+#endif
+}
+
 QUrl Toxer::profileSelector()
 {
-    return QUrl(QStringLiteral("qrc:/qml/Profiles.qml"));
+    return QUrl(qmlLocation() % QStringLiteral("/Profiles.qml"));
 }
 
 QUrl Toxer::mainView()
@@ -44,12 +53,12 @@ QUrl Toxer::mainView()
     UiSettings::AppLayout l = s.app_layout();
     switch (l) {
     case UiSettings::AppLayout::Split:
-        return QUrl(QStringLiteral("qrc:/qml/MainViewSplit.qml"));
+        return QUrl(qmlLocation() % QStringLiteral("/MainViewSplit.qml"));
     case UiSettings::AppLayout::Slim: break;
     }
 
     // default
-    return QUrl(QStringLiteral("qrc:/qml/MainViewSlim.qml"));
+    return QUrl(qmlLocation() % QStringLiteral("/MainViewSlim.qml"));
 }
 
 Toxer::Toxer()

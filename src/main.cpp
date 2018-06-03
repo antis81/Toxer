@@ -36,6 +36,14 @@
 #include "Toxer.h"
 #include "ToxTypes.h"
 
+#ifdef SAILFISHAPP
+#include <QScopedPointer>
+#include <sailfishapp.h>
+#  ifndef FULL_SCREEN
+#    define FULL_SCREEN
+#  endif
+#endif
+
 inline static void registerQmlTypes() {
     ToxTypes::registerQmlTypes();
     Settings::registerQmlTypes();
@@ -46,12 +54,16 @@ inline static void registerQmlTypes() {
     qmlRegisterType<ToxMessenger>(modComponents, 1, 0, "ToxMessenger");
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+#ifdef SAILFISH
+    setenv("QT_QUICK_CONTROLS_STYLE", "Nemo", 1);
+    QQuickWindow::setDefaultAlphaBuffer(true);
+#else
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+#endif
 
+    QGuiApplication app(argc, argv);
     app.thread()->setObjectName(QStringLiteral("MainThread"));
     app.setOrganizationName(QStringLiteral("Tox"));
     app.setApplicationName(QStringLiteral("Toxer"));
@@ -60,10 +72,26 @@ int main(int argc, char *argv[])
     registerQmlTypes();
 
     Toxer toxer;
+
+#ifdef SAILFISHAPP
+    QScopedPointer<QQuickView> sf_view(SailfishApp::createView());
+    QQuickView& view = *sf_view;
+#else
     QQuickView view;
-    view.setTitle(app.applicationDisplayName());
-    view.rootContext()->setContextProperty(QStringLiteral("Toxer"), &toxer);
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
+#endif
+
+#ifdef FULL_SCREEN
+#else
+    QObject::connect(&view, &QQuickView::statusChanged,
+                     [&app, &view](QQuickView::Status status) {
+        if (status == QQuickView::Ready) {
+            QScreen* screen = app.screens()[0];
+            view.resize(view.initialSize());
+            QPoint sc = screen->geometry().center();
+            view.setPosition(sc.x() - (view.width() / 2), sc.y() - (view.height() / 2));
+        }
+    });
+#endif
 
     QObject::connect(&toxer, &Toxer::reloadUi, [&view]()
     {
@@ -76,21 +104,20 @@ int main(int argc, char *argv[])
                                   Q_ARG(QUrl, page));
     });
 
-    QObject::connect(&view, &QQuickView::statusChanged,
-                     [&app, &view](QQuickView::Status status) {
-        if (status == QQuickView::Ready) {
-            QScreen* screen = app.screens()[0];
-            view.resize(view.initialSize());
-            QPoint sc = screen->geometry().center();
-            view.setPosition(sc.x() - (view.width() / 2), sc.y() - (view.height() / 2));
-        }
-    });
-
     QQmlEngine* engine = view.engine();
     QObject::connect(engine, &QQmlEngine::quit, &app, &QGuiApplication::quit);
-    engine->addImportPath(QStringLiteral("qrc:/qml"));
+    engine->addImportPath(Toxer::qmlLocation());
+
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    view.setTitle(app.applicationDisplayName());
+    view.rootContext()->setContextProperty(QStringLiteral("Toxer"), &toxer);
     view.setSource(Toxer::profileSelector());
+
+#ifdef FULL_SCREEN
+    view.showFullScreen();
+#else
     view.show();
+#endif
 
     return app.exec();
 }

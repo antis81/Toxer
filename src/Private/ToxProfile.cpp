@@ -341,6 +341,22 @@ ToxProfilePrivate::~ToxProfilePrivate()
     mTEL->wait();
 }
 
+void ToxProfilePrivate::on_friend_added(int index) {
+    if (activeProfile) {
+        for (auto n : activeProfile->friendNotifiers) {
+            n->on_added(index);
+        }
+    }
+}
+
+void ToxProfilePrivate::on_friend_deleted(int index) {
+    if (activeProfile) {
+        for (auto n : activeProfile->friendNotifiers) {
+            n->on_deleted(index);
+        }
+    }
+}
+
 void ToxProfilePrivate::start()
 {
     if (!mTEL->isRunning()) {

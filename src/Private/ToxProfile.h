@@ -104,6 +104,10 @@ public:
     void on_status_message_changed(const QString& message);
     void on_user_name_changed(const QString& userName);
 
+    // friend notifiers
+    void on_friend_added(int index);
+    void on_friend_deleted(int index);
+
 private:
     QString mName;
     ToxEventLoop* mTEL;

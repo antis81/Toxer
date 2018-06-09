@@ -433,6 +433,67 @@ QList<int> ToxFriendQuery::friends() const
 }
 
 /**
+@brief Add a Tox friend and send an accept request.
+@param[in] pk   the friend's public key from the ToxID
+@param[in] message  the "accept friend request" message
+*/
+void ToxFriendQuery::add(const QString& pk, const QString& message)
+{
+    Q_UNUSED(pk);
+    Q_UNUSED(message);
+    // TODO: implementation
+}
+
+/**
+@brief Add a Tox friend without sending a request.
+@param[in] pk   the friend's public key from the ToxID
+
+Add a Tox friend without sending a request. This is useful for example when
+importing a friend from another profile.
+*/
+void ToxFriendQuery::addNoRequest(const QString& pk)
+{
+    ToxProfilePrivate* p = ToxProfilePrivate::current();
+    if (p) {
+        p->toxSet([&](Tox* tox) {
+            TOX_ERR_FRIEND_ADD err;
+            uint8_t* c_pk = reinterpret_cast<uint8_t*>(pk.toLatin1().data());
+            uint32_t c_index = tox_friend_add_norequest(tox, c_pk, &err);
+            if (err) {
+                qWarning("Could not add Tox friend %s: %s",
+                         qUtf8Printable(pk),
+                         ToxerPrivate::toxErrStr(err, ToxerPrivate::ToxContext::FriendAdd));
+            } else {
+                int index = static_cast<int>(c_index);
+                p->on_friend_added(index);
+            }
+        });
+    }
+}
+
+/**
+@brief Remove a Tox friend from the profile.
+@param index    the friend index
+*/
+void ToxFriendQuery::remove(int index)
+{
+    ToxProfilePrivate* p = ToxProfilePrivate::current();
+    if (p) {
+        p->toxSet([&](Tox* tox) {
+            uint32_t c_index = static_cast<uint32_t>(index);
+            TOX_ERR_FRIEND_DELETE err;
+            tox_friend_delete(tox, c_index, &err);
+            if (err) {
+                qWarning("Could not remove Tox friend %i: %s", index,
+                         ToxerPrivate::toxErrStr(err, ToxerPrivate::ToxContext::FriendDelete));
+            } else {
+                p->on_friend_deleted(index);
+            }
+        });
+    }
+}
+
+/**
 @brief Returns the public key of a friend.
 @param[in] index    the friend index
 */

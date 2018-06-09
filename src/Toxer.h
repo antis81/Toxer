@@ -106,6 +106,9 @@ public:
     int count() const;
 
     Q_INVOKABLE QList<int> friends() const;
+    Q_INVOKABLE void add(const QString& pk, const QString& message);
+    Q_INVOKABLE void addNoRequest(const QString& pk);
+    Q_INVOKABLE void remove(int index);
 
     Q_INVOKABLE QString publicKeyStr(int index) const;
     Q_INVOKABLE QString name(int index) const;

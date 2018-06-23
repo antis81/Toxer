@@ -48,15 +48,25 @@ class ToxProfilePrivate final
 
     public:
         ToxEventLoop(Tox* _tox);
+#if 0
+        inline ~ToxEventLoop() override { qInfo("TEL destroyed"); }
+#endif
 
         void bootstrap();
+        inline void stop() {
+            Q_ASSERT(QThread::currentThread() != this);
+            QMutexLocker lock(&mutex_);
+            active_ = false;
+            quit(); // we don't actually use an event loop!
+        }
 
     private:
         void run() final;
 
     private:
-        mutable QMutex mutex;
-        Tox* tox;
+        mutable QMutex mutex_;
+        Tox* tox_;
+        bool active_;
     };
 
 public:

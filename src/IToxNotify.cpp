@@ -43,7 +43,7 @@
 IToxFriendNotifier::IToxFriendNotifier()
 {
     ToxProfilePrivate* profile = ToxProfilePrivate::current();
-    assert(profile);
+    Q_ASSERT(profile);
     profile->addNotificationObserver(this);
 }
 
@@ -64,7 +64,7 @@ IToxFriendNotifier::~IToxFriendNotifier()
 IToxProfileNotifier::IToxProfileNotifier()
 {
     ToxProfilePrivate* profile = ToxProfilePrivate::current();
-    assert(profile);
+    Q_ASSERT(profile);
     profile->addNotificationObserver(this);
 }
 

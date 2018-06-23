@@ -199,17 +199,17 @@ Tox* ToxProfilePrivate::createTox(const QByteArray& profileData)
 
 ToxProfilePrivate::ToxEventLoop::ToxEventLoop(Tox* _tox)
     : QThread()
-    , tox(_tox)
+    , tox_(_tox)
+    , active_(false)
 {
-    assert(tox);
+    Q_ASSERT(tox_);
     setObjectName(QStringLiteral("ToxEventLoop"));
-    connect(this, &QThread::finished, this, &QThread::deleteLater);
 }
 
 void ToxProfilePrivate::ToxEventLoop::bootstrap()
 {
-    assert(tox);
-    assert(!isRunning());
+    Q_ASSERT(tox_);
+    Q_ASSERT(!isRunning());
 
     quint32 j = static_cast<quint32>(qrand());
 
@@ -217,13 +217,13 @@ void ToxProfilePrivate::ToxEventLoop::bootstrap()
         const BootstrapNode *d =
                 &bootstrap_nodes[j % COUNTOF(bootstrap_nodes)];
         TOX_ERR_BOOTSTRAP err = TOX_ERR_BOOTSTRAP_OK;
-        tox_bootstrap(tox, d->address, d->port, d->key, &err);
+        tox_bootstrap(tox_, d->address, d->port, d->key, &err);
         if (err) {
             qWarning("Failed to bootstrap address %s. Code: %d",
                      d->address, err);
         }
 
-        tox_add_tcp_relay(tox, d->address, d->port, d->key, &err);
+        tox_add_tcp_relay(tox_, d->address, d->port, d->key, &err);
         if (err) {
             qWarning("Failed to add TCP relay for %s. Code: %d",
                      d->address, err);
@@ -233,17 +233,18 @@ void ToxProfilePrivate::ToxEventLoop::bootstrap()
 
 void ToxProfilePrivate::ToxEventLoop::run()
 {
-    QMutexLocker locker(&mutex);
-    const size_t interval = tox_iteration_interval(tox);
+    QMutexLocker locker(&mutex_);
+    const size_t interval = tox_iteration_interval(tox_);
+    active_ = true;
     locker.unlock();
 
-    while (isRunning()) {
-        tox_iterate(tox, nullptr);
+    while (active_) {
+        tox_iterate(tox_, nullptr);
         msleep(interval);
     }
 
     locker.relock();
-    tox_kill(tox);
+    tox_kill(tox_);
 }
 
 ToxProfilePrivate::ToxProfilePrivate(const QString& name,
@@ -251,7 +252,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
     : mName(name)
     , mTEL(new ToxEventLoop(createTox(profileData)))
 {
-    tox_callback_self_connection_status(mTEL->tox,
+    tox_callback_self_connection_status(mTEL->tox_,
                                         [](Tox*, TOX_CONNECTION status, void*)
     {
         if (activeProfile) {
@@ -261,7 +262,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
         }
     });
 
-    tox_callback_friend_connection_status(mTEL->tox,
+    tox_callback_friend_connection_status(mTEL->tox_,
                                           [](Tox*, uint32_t c_index,
                                           TOX_CONNECTION status, void*)
     {
@@ -273,7 +274,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
         }
     });
 
-    tox_callback_friend_name(mTEL->tox,
+    tox_callback_friend_name(mTEL->tox_,
                              [](Tox*, uint32_t c_index,
                              const uint8_t* c_name, size_t c_len, void*)
     {
@@ -288,7 +289,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
         }
     });
 
-    tox_callback_friend_status_message(mTEL->tox,
+    tox_callback_friend_status_message(mTEL->tox_,
                                        [](Tox*, uint32_t c_index,
                                        const uint8_t* c_message, size_t c_len,
                                        void*)
@@ -304,7 +305,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
         }
     });
 
-    tox_callback_friend_status(mTEL->tox,
+    tox_callback_friend_status(mTEL->tox_,
                                [](Tox*, uint32_t c_index,
                                TOX_USER_STATUS status, void*)
     {
@@ -316,7 +317,7 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
         }
     });
 
-    tox_callback_friend_message(mTEL->tox, [](Tox*, uint32_t c_index,
+    tox_callback_friend_message(mTEL->tox_, [](Tox*, uint32_t c_index,
                                 TOX_MESSAGE_TYPE type, const uint8_t *c_message,
                                 size_t c_len, void *) {
         // TODO: handle message type
@@ -335,28 +336,32 @@ ToxProfilePrivate::ToxProfilePrivate(const QString& name,
     });
 }
 
-ToxProfilePrivate::~ToxProfilePrivate()
-{
-    mTEL->quit();
+ToxProfilePrivate::~ToxProfilePrivate() {
+    mTEL->stop();
+#if 0
+    qInfo("Waiting on TEL");
+#endif
     mTEL->wait();
+    delete mTEL;
+    activeProfile = nullptr;
 }
 
 void ToxProfilePrivate::start()
 {
-    if (!mTEL->isRunning()) {
+    if (!mTEL->active_) {
         mTEL->bootstrap();
         mTEL->start();
     }
 }
 
 QVariant ToxProfilePrivate::toxQuery(ToxProfilePrivate::ToxFunc query_func) const {
-    QMutexLocker locker(&mTEL->mutex);
-    return query_func(mTEL->tox);
+    QMutexLocker locker(&mTEL->mutex_);
+    return query_func(mTEL->tox_);
 }
 
 void ToxProfilePrivate::toxSet(ToxProfilePrivate::ToxSetFunc set_func) {
-    QMutexLocker locker(&mTEL->mutex);
-    set_func(mTEL->tox);
+    QMutexLocker locker(&mTEL->mutex_);
+    set_func(mTEL->tox_);
 }
 
 void ToxProfilePrivate::addNotificationObserver(IToxFriendNotifier* notify)

@@ -57,6 +57,10 @@ Toxer::Toxer()
 {
 }
 
+Toxer::~Toxer() {
+    delete ToxProfilePrivate::current();
+}
+
 QString Toxer::toxVersionString()
 {
     return QString::fromLatin1("%1.%2.%3")
@@ -103,6 +107,17 @@ void Toxer::activateProfile(const QString& profileName,
 void Toxer::createProfile(const QString& profileName, const QString& password)
 {
     ToxProfilePrivate::create(profileName, password);
+}
+
+/**
+@brief Closes the current Tox profile
+*/
+void Toxer::closeProfile() {
+    ToxProfilePrivate::Ptr p = ToxProfilePrivate::current();
+    if (p) {
+        delete p;
+        emit reloadUi();
+    }
 }
 
 /**

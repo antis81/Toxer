@@ -43,6 +43,7 @@ public:
 
 public:
     Toxer();
+    ~Toxer() override;
 
     Q_INVOKABLE QString toxVersionString();
 
@@ -51,6 +52,7 @@ public:
                                      const QString& password);
     Q_INVOKABLE void createProfile(const QString& profileName,
                                    const QString& password);
+    Q_INVOKABLE void closeProfile();
 
     Q_INVOKABLE QUrl avatarsUrl() const;
     Q_INVOKABLE bool exists(const QUrl& url) const;
@@ -67,7 +69,6 @@ public:
 
 public:
     Q_INVOKABLE QString name() const;
-
     Q_INVOKABLE QString userName() const;
     Q_INVOKABLE void setUserName(const QString& newValue);
     Q_INVOKABLE QString statusMessage() const;

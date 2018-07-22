@@ -1,10 +1,9 @@
 # Toxer: The Tox-messenger that simply fits.
 Toxer aims to become the framework of choice for QML based Tox client implementations. Currently a builtin user interface comes with it.
 
-## Status: **! experimental !**
-**Please note our baby is just born and learning to walk!**
+![! WARNING: EXPERIMENTAL !](webres/experimental.png  "ToxerIsExperimental")
 
-In this status we focus on setteling the code basis and the release-chain. 
+**Please note our baby is just born and learning to walk!**
 
 ## Resources:
 

@@ -8,7 +8,7 @@
 lib/*/
 
 # outsource ui components
-qml/
+/qml/
 
 # sailfish package files
 /*.png
@@ -17,3 +17,4 @@ qml/
 /extra/
 /icons/
 /[RrPpMm]*/
+/sailfish-ui/

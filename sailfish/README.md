@@ -4,14 +4,13 @@ Before building, make sure SailfishOS SDK (aka MerSDK) is installed and accessib
 
 By default the build script is setup to build for the emulator. Make sure using the correct SailfishOS version by setting `SFVER`.
 
-## Step 1: Prepare the SDK and install the basic build environment.
+## Step 1: Prepare the SDK and Install the Basic Build Environment
 
 ```bash
 # ssh into the Build-SDK
-# TODO: encapsulate this step
 ssh -p 2222 -i ~/SailfishOS/vmshare/ssh/private_keys/engine/mersdk mersdk@localhost
 
-# then inside the SDK, install compiler and build environment
+# once inside the SDK, install compiler and build environment
 export SFVER='2.2.0.29'
 sb2 -t SailfishOS-$SFVER-armv7hl -m sdk-install -R zypper install gcc gcc-c++ autoconf automake make libtool`
 `sb2 -t "SailfishOS-$SFVER-i486" -m sdk-install -R zypper install gcc gcc-c++ autoconf automake make libtool`
@@ -19,34 +18,31 @@ sb2 -t SailfishOS-$SFVER-armv7hl -m sdk-install -R zypper install gcc gcc-c++ au
 # you can leave the ssh session now (press CTRL+D)
 ```
 
-## Step 2: Setup the Toxer specific build environment.
+## Step 2: Setup the Host Build Environment
+
+Edit the SDK environment located in `mersdk/env`:
 
 ```bash
-# IMPORTANT:
-Edit the "env" file located in this folder and set SFVER to the correct SDK version
-# Example:
-SFVER='2.0.0.29'
-
-# Optionally you can also adjust the toxcore & sodium versions to your needs here.
+SFVER='2.0.0.29' # set to your installed version of MerSDK
+# You can also adjust the toxcore & sodium versions to your needs.
 ```
 
-## Step 3: Run the preparation scripts.
+Run the preparation scripts:
 
 ```bash
 # build & install toxcore + sodium libs in MerSDK before building the package
-./dev-prepare.sh
+./setup-mersdk.sh
 
-# copy the project sources
-./package.sh
+# copy the local project files
+./copy-project.sh
 ```
 
-## Step 4: Build Toxer RPM package manually inside the SDK
+## Step 3: Build Toxer RPM Package in the SDK
 
 ```bash
-# TODO: This step can be automated as well
-# ssh to MerSDK again (see Step 1)
+# ssh to MerSDK (see Step 1)
 
-# Finally build the RPM package from inside the SDK.
+# Finally build the RPM package in the SDK.
 cd /home/src1/Toxer/sailfish  # cd to /your/Toxer/sailfish directory
 mb2 -t <your_sailfish_target> build
 ```

@@ -6,7 +6,7 @@
 # << macros
 
 Name:       toxer
-Summary:    Sailfish Tox client
+Summary:    Tox client for Sailfish
 Version:    1.0
 Release:    1
 Group:      Qt/Qt
@@ -23,44 +23,34 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  cmake
 
 %description
-Toxer is a scalable Tox client targetting multiple platforms.
+Toxer is a Tox client with scalable UI targetting multiple platforms.
 
 %prep
 %setup -q -n %{name}-%{version}
 
-# >> setup
-# << setup
-
 %build
-# >> build pre
 rm -rf rpmbuilddir
 mkdir rpmbuilddir
 cd rpmbuilddir
 cmake \
  -DCMAKE_BUILD_TYPE=RelWithDebInfo \
  -DCMAKE_INSTALL_PREFIX=/usr \
+ -DCMAKE_INSTALL_RPATH=%{_datadir}/%{name}/lib \
  -DSAILFISHAPP=ON \
  -DCMAKE_PREFIX_PATH=extra/%{_target_cpu} \
  -DPKG_CONFIG_USE_CMAKE_PREFIX_PATH=1 \
  ..
 cd ..
 make -C rpmbuilddir -s -j4 %{?_smp_mflags}
-# << build pre
 
-# >> build post
-# << build post
 %install
 rm -rf %{buildroot}
-# >> install pre
+echo "---> Building RPM content in buildroot: %{buildroot}"
 DESTDIR=%{buildroot} make -C rpmbuilddir install
-#mkdir -p %{_bindir}
-mkdir -p %{buildroot}%{_libdir}
-echo "----------> buildroot: %{buildroot}"
-cp -r extra/%{_target_cpu}/lib/* %{buildroot}%{_libdir}
-# << install pre
+# manually copy third party shared libs to rpath
+mkdir %{buildroot}/%{_datadir}/%{name}/lib
+cp -r extra/%{_target_cpu}/lib/* %{buildroot}/%{_datadir}/%{name}/lib
 
-# >> install post
-# << install post
 desktop-file-install --delete-original \
   --dir %{buildroot}%{_datadir}/applications \
    %{buildroot}%{_datadir}/applications/*.desktop
@@ -68,10 +58,6 @@ desktop-file-install --delete-original \
 %files
 %defattr(-,root,root,-)
 %{_bindir}
-%{_libdir}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
-# >> files
-# << files
-

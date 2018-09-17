@@ -23,7 +23,7 @@ sb2 -t SailfishOS-$SFVER-armv7hl -m sdk-install -R zypper install gcc gcc-c++ au
 Edit the SDK environment located in `mersdk/env`:
 
 ```bash
-SFVER='2.0.0.29' # set to your installed version of MerSDK
+SFVER='2.2.0.29' # set to your installed version of MerSDK
 # You can also adjust the toxcore & sodium versions to your needs.
 ```
 

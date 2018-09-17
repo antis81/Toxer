@@ -126,15 +126,15 @@ else()
         )
 endif()
 
-install (TARGETS
-    toxer
-    RUNTIME DESTINATION bin COMPONENT Runtime
-    LIBRARY DESTINATION lib COMPONENT Runtime
-    )
-
 if(SAILFISH)
+    install (TARGETS
+        toxer
+        RUNTIME DESTINATION bin COMPONENT Runtime
+        LIBRARY DESTINATION share/toxer/lib COMPONENT Runtime
+        )
     install(DIRECTORY qml
         DESTINATION share/toxer
+        PATTERN "*.qrc*" EXCLUDE
         )
     install(FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/toxer.desktop
@@ -143,5 +143,11 @@ if(SAILFISH)
     install(FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/toxer.png
         DESTINATION share/icons/hicolor/86x86/apps
+        )
+else()
+    install (TARGETS
+        toxer
+        RUNTIME DESTINATION bin COMPONENT Runtime
+        LIBRARY DESTINATION lib COMPONENT Runtime
         )
 endif()

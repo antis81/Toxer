@@ -38,20 +38,6 @@
         <file>images/light/group.svg</file>
         <file>images/light/login_logo.svg</file>
         <file>images/light/logout.svg</file>
-        <file>images/dark/taskbar/taskbar_away.svg</file>
-        <file>images/dark/taskbar/taskbar_busy.svg</file>
-        <file>images/dark/taskbar/taskbar_event_small.svg</file>
-        <file>images/dark/taskbar/taskbar_event.svg</file>
-        <file>images/dark/taskbar/taskbar_invisible.svg</file>
-        <file>images/dark/taskbar/taskbar_offline.svg</file>
-        <file>images/dark/taskbar/taskbar_online.svg</file>
-        <file>images/light/taskbar/taskbar_away.svg</file>
-        <file>images/light/taskbar/taskbar_busy.svg</file>
-        <file>images/light/taskbar/taskbar_event_small.svg</file>
-        <file>images/light/taskbar/taskbar_event.svg</file>
-        <file>images/light/taskbar/taskbar_invisible.svg</file>
-        <file>images/light/taskbar/taskbar_offline.svg</file>
-        <file>images/light/taskbar/taskbar_online.svg</file>
         <file>images/light/settings.svg</file>
         <file>images/light/transfer.svg</file>
     </qresource>

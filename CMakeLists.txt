@@ -69,15 +69,3 @@ target_include_directories (toxercore PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     >)
 
-
-if(SAILFISH)
-    install(TARGETS toxercore
-        LIBRARY DESTINATION share/toxer/lib COMPONENT Runtime
-        )
-else()
-    install (TARGETS
-        toxer
-        RUNTIME DESTINATION bin COMPONENT Runtime
-        LIBRARY DESTINATION lib COMPONENT Runtime
-        )
-endif()

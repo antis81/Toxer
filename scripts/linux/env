@@ -1,0 +1,11 @@
+#!/bin/sh
+
+LIBS="/usr/local/lib"
+
+# TODO sodium vars
+
+# Tox vars
+TOX_VERSION='v0.2.7'
+TOX_ARCHIVE="https://github.com/TokTok/c-toxcore/archive/${TOX_VERSION}.tar.gz"
+TOX_HEADERS="/usr/local/include/tox"
+

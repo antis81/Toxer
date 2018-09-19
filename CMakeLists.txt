@@ -33,7 +33,6 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package (Qt5 COMPONENTS Core Network Qml Gui Quick REQUIRED)
-find_package (sodium REQUIRED)
 
 file (GLOB_RECURSE SCRIPTS "scripts/*.*")
 add_custom_target(scripts SOURCES ${SCRIPTS})

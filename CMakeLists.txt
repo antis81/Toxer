@@ -33,6 +33,7 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package (Qt5 COMPONENTS Core Network Qml Gui Quick REQUIRED)
+find_package (sodium REQUIRED)
 
 file (GLOB_RECURSE SCRIPTS "scripts/*.*")
 add_custom_target(scripts SOURCES ${SCRIPTS})
@@ -43,6 +44,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 add_subdirectory (lib)
+
+find_library(TOX_CORE toxcore REQUIRED)
 
 set (TOXERCORE_SOURCES
     src/IToxNotify.cpp
@@ -69,3 +72,8 @@ target_include_directories (toxercore PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     >)
 
+target_link_libraries (toxercore
+    Qt5::Quick
+    ${TOX_CORE}
+    sodium
+    )

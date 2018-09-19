@@ -33,11 +33,12 @@
 #include <QObject>
 #include <QUrl>
 
-class Toxer final : public QObject
+class Toxer : public QObject
 {
     Q_OBJECT
 
 public:
+    static void registerQmlTypes();
     static QString qmlLocation();
     static QUrl profileSelector();
     static QUrl mainView();

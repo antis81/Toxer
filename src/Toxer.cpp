@@ -33,6 +33,13 @@
 #include <QFileInfo>
 #include <QGuiApplication>
 
+void Toxer::registerQmlTypes() {
+    constexpr const char* modComponents = { "com.tox.qmlcomponents" };
+    qmlRegisterType<ToxProfileQuery>(modComponents, 1, 0, "ToxProfileQuery");
+    qmlRegisterType<ToxFriendQuery>(modComponents, 1, 0, "ToxFriendQuery");
+    qmlRegisterType<ToxMessenger>(modComponents, 1, 0, "ToxMessenger");
+}
+
 QString Toxer::qmlLocation()
 {
 #ifdef SAILFISH

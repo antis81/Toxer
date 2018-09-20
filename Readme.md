@@ -1,9 +1,9 @@
-# Toxer: The Tox-messenger that simply fits.
-Toxer aims to become the framework of choice for QML based Tox client implementations. Currently a builtin user interface comes with it.
+# Toxer: The Tox framework that simply fits Qt(Quick).
+Toxer is a quality framework for building Qt/QML based Tox applications. The framework itself does not provide a user interface.
 
 ![! WARNING: EXPERIMENTAL !](webres/experimental.png  "ToxerIsExperimental")
 
-**Please note our baby is just born and learning to walk!**
+**Lots of features are still not implemented. Feel welcome to contribute your ideas!**
 
 ## Resources:
 
@@ -17,17 +17,16 @@ Currently Toxer has to be built from source. If you want to help out, please con
 
 ## Usage
 
-Toxer framework is fairly simple to use! All Tox data is accessed via query objects. Currently we have `ToxProfileQuery` and `ToxFriendQuery` to perform these tasks.
+Toxer framework integrates fairly smooth with Qt applications! Tox data is represented via easy to use query objects.
 
-Example to query Tox friend data in QML:
+I would like to introduce two of them, namely `ToxProfileQuery` and `ToxFriendQuery` to perform quite common tasks like showing a friend's online status.
 
 ```qml
 import QtQuick 2.0
 
-import toxer.
+import com.tox.qmlcomponents
 
 MyItem {
-    // note: A Tox profile must be initialized before for this example to work.
     ToxFriendQuery {
         id: tfq
         onMessage: {
@@ -36,26 +35,34 @@ MyItem {
     }
 
     Component.onCompleted {
-        // note: the password can be derived from a TextField or something and is not saved by Toxer in any way!
+        // notes:
+        // 1. For the record: The password used here is an example.
+        //    It is required to decrypt the Tox profile locally(!) on your device.
+        //    Toxer respects your privacy and does in no way save your password.
+        //    You can input the password in a PasswordField or similar text field!
+        // 2. You can either create an empty profile or open an existing one.
+        //    For the example we assume an existing profile "my_profile.tox" on disk.
         Toxer.activateProfile("my_profile.tox", "my_secret_password");
         console.log("I have as many as " + tfq.count + " friends on Tox. Yay!");
     }
 }
 ```
 
+Once you get the hang of it, using Toxer object mechanisms becomes easy and smooth.
+
+A more advanced UI integration is waiting here: https://gitlab.com/antis81/Toxer-UI
+
 ## Progress
 
-The following table provides a good overview of what is there and what is missing in order to provide the basic functionality.
+The following table provides an overview of what is there and what is yet to be done.
 
 Feature | Progress | Notes
 ---- | ---- | ----
-Encryption | 100% | --
-Profile-Management | 95% | todo: profile import
-Tox-Bootstrap | 95% | randomize nodes
-Friends | 90% | todo: add/remove friend
-Chat | 30% | todo: message management (history etc.)
-Group-Chat | 0% | ??
-Styles/Themes | 95% | todo: save style settings; support background images
+Profile-Management | 95% | --
+Add/Remove Friends | 0% | TODO
+1v1 Chat | 30% | 1v1 chat works
+Group Chat | 0% | TODO
+Styles/Themes | 95% | works; some settings are not persistent yet
 
 # License
 The Toxer application is freely usable under the terms of the MIT license. The licenses of the underlying libraries (e.g. Qt and toxcore) apply to these components. If you plan to re-use the code, please contact the Tox community.

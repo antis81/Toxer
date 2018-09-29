@@ -37,7 +37,6 @@ find_package (Qt5 COMPONENTS Core Network Qml Gui Quick REQUIRED)
 file (GLOB_RECURSE SCRIPTS "scripts/*.*")
 add_custom_target(scripts SOURCES ${SCRIPTS})
 
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti")
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)

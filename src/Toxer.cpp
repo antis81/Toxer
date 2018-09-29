@@ -85,6 +85,15 @@ QString Toxer::toxVersionString()
             .arg(TOX_VERSION_PATCH);
 }
 
+/**
+@brief Returns the system path where Tox profiles live.
+@return the path to Tox profiles location
+*/
+QString Toxer::profileLocation() const
+{
+    return ToxerPrivate::profilesDir();
+}
+
 QStringList Toxer::availableProfiles() const
 {
     QDir dir(ToxerPrivate::profilesDir());

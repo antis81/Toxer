@@ -49,6 +49,7 @@ public:
 
     Q_INVOKABLE QString toxVersionString();
 
+    Q_INVOKABLE QString profileLocation() const;
     Q_INVOKABLE QStringList availableProfiles() const;
     Q_INVOKABLE void activateProfile(const QString& profileName,
                                      const QString& password);

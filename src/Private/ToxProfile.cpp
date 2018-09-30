@@ -46,11 +46,6 @@ ToxProfilePrivate* ToxProfilePrivate::activeProfile = nullptr;
 */
 void ToxProfilePrivate::create(const QString& name, const QString& password)
 {
-#ifdef SAILFISH
-    // TODO: Sailfish support
-    Q_UNUSED(name); Q_UNUSED(password);
-    qWarning("TODO: Sailfish (Qt5.6) support for function %s", __func__);
-#else
     QFile f(ToxerPrivate::profilesDir() % QString::fromUtf8("/%1.tox")
             .arg(name));
 
@@ -92,7 +87,6 @@ void ToxProfilePrivate::create(const QString& name, const QString& password)
                  qUtf8Printable(name),
                  qUtf8Printable(f.errorString()));
     }
-#endif
 }
 
 /**

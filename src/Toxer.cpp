@@ -138,7 +138,7 @@ void Toxer::createProfile(const QString& profileName, const QString& password)
 @brief Closes the current Tox profile
 */
 void Toxer::closeProfile() {
-    ToxProfilePrivate::Ptr p = ToxProfilePrivate::current();
+    ToxProfilePrivate* p = ToxProfilePrivate::current();
     if (p) {
         delete p;
         emit reloadUi();

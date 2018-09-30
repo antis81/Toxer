@@ -74,10 +74,7 @@ class ToxProfilePrivate final
     };
 
 public:
-    using Ptr = ToxProfilePrivate*;
-
-public:
-    inline static Ptr current() {
+    inline static ToxProfilePrivate* current() {
         return activeProfile;
     }
 
@@ -126,7 +123,7 @@ private:
     QVector<IToxFriendNotifier*> friendNotifiers;
 
 private:
-    static Ptr activeProfile;
+    static ToxProfilePrivate* activeProfile;
 };
 
 #endif

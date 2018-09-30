@@ -120,7 +120,7 @@ void Toxer::activateProfile(const QString& profileName,
     const ToxProfilePrivate* old = ToxProfilePrivate::current();
     ToxProfilePrivate::activate(profileName, password);
     if (old != ToxProfilePrivate::current()) {
-        emit reloadUi();
+        emit profileChanged();
     }
 }
 
@@ -141,8 +141,16 @@ void Toxer::closeProfile() {
     ToxProfilePrivate* p = ToxProfilePrivate::current();
     if (p) {
         delete p;
-        emit reloadUi();
+        emit profileChanged();
     }
+}
+
+/**
+@brief Returns, if Toxer has loaded a profile.
+@return true when a profile is loaded; false otherwise
+*/
+bool Toxer::hasProfile() const {
+    return ToxProfilePrivate::current() != nullptr;
 }
 
 /**

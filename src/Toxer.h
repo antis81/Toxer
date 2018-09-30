@@ -56,12 +56,13 @@ public:
     Q_INVOKABLE void createProfile(const QString& profileName,
                                    const QString& password);
     Q_INVOKABLE void closeProfile();
+    Q_INVOKABLE bool hasProfile() const;
 
     Q_INVOKABLE QUrl avatarsUrl() const;
     Q_INVOKABLE bool exists(const QUrl& url) const;
 
 signals:
-    void reloadUi();
+    void profileChanged();
 };
 
 class ToxProfileQuery : public QObject, IToxProfileNotifier

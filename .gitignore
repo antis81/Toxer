@@ -6,15 +6,3 @@
 
 # libs
 lib/*/
-
-# outsource ui components
-/qml/
-
-# sailfish package files
-/*.png
-/*.desktop
-/documentation.list
-/extra/
-/icons/
-/[RrPpMm]*/
-/sailfish/
